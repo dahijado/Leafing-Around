@@ -1,4 +1,41 @@
 ---
-
+import { Image } from 'astro:assets';
+import fondoHeader from '../assets/fondo_header.png';
+import logo from '../assets/logo banner.png';
 ---
+<div class="header">
+    <Image class="fondo-header" src={fondoHeader} alt="background" quality={100} format="png"/>
+    <a href="/"><Image class="titulo" src={logo} alt="titulo" quality={100} format="png"/></a>
+</div>
+
+<style>
+    .header {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .fondo-header {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        min-width: 1920px;
+        object-fit: cover;
+        object-position: center;
+        z-index: 1;
+    }
+
+    .titulo {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 9.5rem;
+        width: auto;
+        z-index: 2;
+    }
+</style>
 
