@@ -1,0 +1,36 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Button } from "@/components/starwind/button";
+---
+
+<Layout>
+    <div class="center bg-taupe-500">
+        <h1>404 - Not Found</h1>
+        <Button class="boton  bg-taupe-700 hover:bg-taupe-800" href="/" variant="info" size="md">Volver</Button>
+    </div>
+</Layout>
+
+
+<style>
+    h1{
+        margin: 20px;
+        font-size: 2.5rem;
+        font-family: "Fredoka", sans-serif;
+        font-weight: bolder;
+        color: #F9F6EE;
+    }
+
+    .boton{
+        font-family: "Fredoka", sans-serif;
+        font-weight: 400;
+        color: white;
+    }
+
+    .center{
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
