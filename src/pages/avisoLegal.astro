@@ -1,0 +1,98 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/header.astro";
+import Nav from "../components/nav.astro";
+import Footer from "../components/footer.astro";
+---
+
+<Layout title="Leafing Around - Aviso Legal">
+  <Header />
+  <Nav />
+
+  <div class="contenedor">
+    <section class="carta">
+      <h2 class="avisoh2">Sobre este proyecto:</h2>
+      <p>
+        Este sitio no tiene ningún fin comercial. Es un sitio web educativo creado con fines de aprendizaje de desarrollo web.
+      </p>
+
+      <h2 class="avisoh2">Datos y contenido:</h2>
+      <p>
+        Los datos de criaturas, peces e insectos han sido obtenidos a través de la API de Nookipedia.
+      </p>
+
+      <h2 class="avisoh2">Propiedad intelectual:</h2>
+      <p>
+        Todos los personajes, nombres, criaturas y elementos pertenecen a Nintendo.
+      </p>
+
+      <h2 class="avisoh2">Créditos:</h2>
+      <p>
+        Propiedad intelectual: Nintendo<br />
+        Datos: Nookipedia<br />
+        Iconos: Manuel Campos Dominguez
+      </p>
+    </section>
+  </div>
+
+  <Footer />
+</Layout>
+
+<style>
+    .contenedor {
+        display: flex;
+        justify-content: center;
+        padding: 4rem 1rem;
+        background: #F6F1E8;
+    }
+
+    .carta {
+        background:  #FFF8EE;
+        border: 3px solid rgba(0, 0, 0, 0.4);
+        border-radius: 16px;
+        max-width: 600px;
+        width: 100%;
+        height: auto;
+        padding: 1rem 2rem;
+        font-family: "Fredoka", sans-serif;
+        color: #2E2A27;
+        line-height: 1.7;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        text-align: justify;
+    }
+
+    .avisoh2 {
+        margin-top: 1rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-align: left;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+        .carta {
+            padding: 1.5rem;
+    }
+    }
+    @media (max-width: 480px) {
+        .carta {
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+        h2 {
+            font-size: 0.95rem;
+        }
+
+        p {
+            font-size: 0.9rem;
+        }
+
+        .contenedor {
+            padding: 1rem 0.5rem;
+        }
+    }
+</style>

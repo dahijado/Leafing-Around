@@ -8,13 +8,13 @@ import { Image } from 'astro:assets';
 import blathersError from '../assets/Blathers error.png';
 ---
 
-<Layout>
+<Layout title="Leafing Around - Not Found">
     <Header />
     <Nav />
     <div class="fondo-404">
         <h1>404 - Not Found</h1>
         <Image class="img-error" src={blathersError} alt="blathersError" quality={100} format="png"/>
-        <p class="p-error">¡Uhu! No puede ser... Algo salió mal...</p>
+        <p class="p-error">¡Uhu! No puede ser... ¡No encuentro la página!</p>
         <Button class="boton  bg-taupe-700 hover:bg-taupe-800" href="/" variant="info" size="md">Volver</Button>
     </div>
     <Footer />

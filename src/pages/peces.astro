@@ -3,26 +3,46 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/header.astro';
 import Nav from '../components/nav.astro';
 import Footer from '../components/footer.astro';
+import MensajeError from '../components/mensajeError.astro';
 
 import {
   getPeces,
   ordenarCriaturas,
 } from "../lib/funciones.js";
 
-const data = await getPeces();
-const peces = ordenarCriaturas(data);
+let peces = [];
+let error = null;
+
+try {
+  const data = await getPeces();
+  peces = ordenarCriaturas(data);
+} catch (err) {
+  error = err;
+}
 ---
 
 <Layout title="Leafing Around - Peces">
     <Header />
     <Nav />
-    <div class="grid-peces">
-    {peces.map((pez) => (
-        <div class="card">
-            <a href="/info"><img src={pez.image_url} /></a>
+    {error && <MensajeError error={error} />}
+
+    {!error && (
+        <>
+        <script define:vars={{ peces }}>
+            window.criaturas = criaturas;
+        </script>
+
+        <div class="grid-criaturas">
+            {peces.map((pez) => (
+            <div class="card">
+                <a href="/info">
+                <img src={pez.image_url} />
+                </a>
+            </div>
+            ))}
         </div>
-    ))}
-    </div>
+        </>
+    )}
     <Footer />
 </Layout>
 

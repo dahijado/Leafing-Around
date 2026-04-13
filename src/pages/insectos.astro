@@ -3,26 +3,46 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/header.astro';
 import Nav from '../components/nav.astro';
 import Footer from '../components/footer.astro';
+import MensajeError from '../components/mensajeError.astro';
 
 import {
   getInsectos,
   ordenarCriaturas,
 } from "../lib/funciones.js";
 
-const data = await getInsectos();
-const insectos = ordenarCriaturas(data);
+let insectos = [];
+let error = null;
+
+try {
+  const data = await getInsectos();
+  insectos = ordenarCriaturas(data);
+} catch (err) {
+  error = err;
+}
 ---
 
 <Layout title="Leafing Around - Insectos">
     <Header />
     <Nav />
-    <div class="grid-insectos">
-    {insectos.map((insecto) => (
-        <div class="card">
-            <a href="/info"><img src={insecto.image_url} /></a>
+    {error && <MensajeError error={error} />}
+
+    {!error && (
+        <>
+        <script define:vars={{ insectos }}>
+            window.criaturas = criaturas;
+        </script>
+
+        <div class="grid-criaturas">
+            {insectos.map((insecto) => (
+            <div class="card">
+                <a href="/info">
+                <img src={insecto.image_url} />
+                </a>
+            </div>
+            ))}
         </div>
-    ))}
-    </div>
+        </>
+    )}
     <Footer />
 </Layout>
 

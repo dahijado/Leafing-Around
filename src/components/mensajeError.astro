@@ -1,0 +1,56 @@
+---
+import { Image } from "astro:assets";
+import blathersError from "../assets/Blathers error.png";
+
+const { error = null} = Astro.props;
+
+const mensaje = error?.message || error || "¡Uhu! Algo salió mal... Inténtalo de nuevo más tarde";
+---
+
+<div class="fondo-error">
+  <h1>¡UHU!</h1>
+
+  <Image class="img-error" src={blathersError} alt="blathersError" quality={100} format="png" />
+
+  <p class="p-error">{mensaje}</p>
+</div>
+
+<style>
+  .fondo-error {
+    background-color: #F6F1E8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 1rem;
+    min-height: 60vh;
+    text-align: center;
+  }
+
+  h1 {
+    margin: 20px;
+    font-size: 2.5rem;
+    font-family: "Fredoka", sans-serif;
+    font-weight: bolder;
+    color: #2E2A27;
+  }
+
+  .img-error {
+    height: 13rem;
+    width: auto;
+  }
+
+  .p-error {
+    margin: 20px;
+    font-family: "Fredoka", sans-serif;
+    font-weight: 500;
+    color: #2E2A27;
+    max-width: 500px;
+  }
+
+  .boton {
+    font-family: "Fredoka", sans-serif;
+    font-weight: 400;
+    color: white;
+  }
+</style>

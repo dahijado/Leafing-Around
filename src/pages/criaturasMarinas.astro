@@ -3,27 +3,47 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/header.astro';
 import Nav from '../components/nav.astro';
 import Footer from '../components/footer.astro';
+import MensajeError from "../components/mensajeError.astro";
 
 import {
   getCriaturas,
   ordenarCriaturas,
 } from "../lib/funciones.js";
 
-const data = await getCriaturas();
-const criaturas = ordenarCriaturas(data);
+let criaturas = [];
+let error = null;
+
+try {
+  const data = await getCriaturas();
+  criaturas = ordenarCriaturas(data);
+} catch (err) {
+  error = err;
+}
 ---
 
 <Layout title="Leafing Around - Criaturas Marinas">
-    <Header />
-    <Nav />
-    <div class="grid-criaturas">
-    {criaturas.map((criatura) => (
-        <div class="card">
-            <a href="/info"><img src={criatura.image_url} /></a>
-        </div>
-    ))}
-    </div>
-    <Footer />
+  <Header />
+  <Nav />
+  {error && <MensajeError error={error} />}
+
+  {!error && (
+    <>
+      <script define:vars={{ criaturas }}>
+        window.criaturas = criaturas;
+      </script>
+
+      <div class="grid-criaturas">
+        {criaturas.map((criatura) => (
+          <div class="card">
+            <a href="/info">
+              <img src={criatura.image_url} />
+            </a>
+          </div>
+        ))}
+      </div>
+    </>
+  )}
+  <Footer />
 </Layout>
 
 <style>
@@ -56,7 +76,7 @@ const criaturas = ordenarCriaturas(data);
     .card:hover {
         transform: scale(1.05);
         box-shadow: 0 0.25rem 0.625rem rgba(0,0,0,0.15);
-        background: #E8DDCF;;
+        background: #E8DDCF;
     }
 
     @media (max-width: 1024px) {
