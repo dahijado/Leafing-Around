@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/header.astro';
 import Nav from '../components/nav.astro';
+import Sidebar from '../components/sidebar.astro';
 import Footer from '../components/footer.astro';
 import MensajeError from '../components/mensajeError.astro';
 
@@ -24,15 +25,16 @@ try {
 <Layout title="Leafing Around - Insectos">
     <Header />
     <Nav />
-    {error && <MensajeError error={error} />}
+    <div class="insectos-container">
+        <Sidebar />
 
-    {!error && (
+        {!error && (
         <>
         <script define:vars={{ insectos }}>
-            window.criaturas = criaturas;
+            window.criaturas = insectos;
         </script>
 
-        <div class="grid-criaturas">
+        <div class="grid-insectos">
             {insectos.map((insecto) => (
             <div class="card">
                 <a href="/info">
@@ -42,16 +44,23 @@ try {
             ))}
         </div>
         </>
-    )}
+        )}
+    </div>
+
+    {error && <MensajeError error={error} />}
     <Footer />
 </Layout>
 
 <style>
+    .insectos-container {
+        display: grid;
+        grid-template-columns: 260px 1fr 260px;
+    }
+
     .grid-insectos {
         display: grid;
         grid-template-columns: repeat(11, 1fr);
         gap: 0.5rem;
-
         max-width: 56rem;
         margin: 1.25rem auto;
         padding: 0.625rem;
@@ -94,6 +103,12 @@ try {
     @media (max-width: 480px) {
     .grid-insectos {
         grid-template-columns: repeat(2, 1fr);
+    }
+    }
+
+    @media (max-width: 900px) {
+      .insectos-container {
+        grid-template-columns: 1fr;
     }
     }
 </style>

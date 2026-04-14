@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/header.astro';
 import Nav from '../components/nav.astro';
 import Footer from '../components/footer.astro';
+import Sidebar from '../components/sidebar.astro';
 import MensajeError from '../components/mensajeError.astro';
 
 import {
@@ -24,15 +25,16 @@ try {
 <Layout title="Leafing Around - Peces">
     <Header />
     <Nav />
-    {error && <MensajeError error={error} />}
+    <div class="peces-container">
+        <Sidebar />
 
-    {!error && (
+        {!error && (
         <>
         <script define:vars={{ peces }}>
-            window.criaturas = criaturas;
+            window.criaturas = peces;
         </script>
 
-        <div class="grid-criaturas">
+        <div class="grid-peces">
             {peces.map((pez) => (
             <div class="card">
                 <a href="/info">
@@ -42,16 +44,23 @@ try {
             ))}
         </div>
         </>
-    )}
+        )}
+    </div>
+
+    {error && <MensajeError error={error} />}
     <Footer />
 </Layout>
 
 <style>
+    .peces-container {
+        display: grid;
+        grid-template-columns: 260px 1fr 260px;
+    }
+
     .grid-peces {
         display: grid;
         grid-template-columns: repeat(11, 1fr);
         gap: 0.5rem;
-
         max-width: 56rem;
         margin: 1.25rem auto;
         padding: 0.625rem;
@@ -96,4 +105,10 @@ try {
         grid-template-columns: repeat(2, 1fr);
     }
     }
+
+    @media (max-width: 900px) {
+    .peces-container {
+        grid-template-columns: 1fr;
+    }
+}
 </style>
