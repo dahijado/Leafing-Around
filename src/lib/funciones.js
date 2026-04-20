@@ -1,9 +1,8 @@
 const API_KEY = "8e61650d-b457-4d63-bf8b-3720886cf748";
 
-//Ordena las criaturas según el orden que aparece en la api
-export function ordenarCriaturas(data) {
-  return [...data].sort((a, b) => (a.number ?? 0) - (b.number ?? 0));
-}
+/**
+ * FUNCIONES DE FETCH
+ */
 
 let cache = {};
 
@@ -69,4 +68,13 @@ export function getPeces() {
 // Conseguir datos de insectos
 export function getInsectos() {
   return fetchNookipedia("bugs");
+}
+
+/**
+ * FUNCIONES AUXILIARES
+ */
+
+// Ordena las criaturas según el orden que aparece en la api
+export function ordenarCriaturas(data) {
+  return [...data].sort((a, b) => (a.number ?? 0) - (b.number ?? 0));
 }

@@ -1,11 +1,12 @@
 import tailwindcss from "@tailwindcss/vite";
-// @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 
-// https://astro.build/config
+import svelte from "@astrojs/svelte";
+
 export default defineConfig({
-	
-	vite: {
-		plugins: [tailwindcss()],
-	},
+  vite: {
+    plugins: [tailwindcss()],
+  },
+
+  integrations: [svelte()],
 });

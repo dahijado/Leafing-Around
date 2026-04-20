@@ -3,112 +3,28 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/header.astro';
 import Nav from '../components/nav.astro';
 import Footer from '../components/footer.astro';
-import Sidebar from '../components/sidebar.astro';
+import GridPeces from '../components/gridPeces.svelte';
 import MensajeError from '../components/mensajeError.astro';
 
-import {
-  getPeces,
-  ordenarCriaturas,
-} from "../lib/funciones.js";
+import { getPeces,ordenarCriaturas } from '../lib/funciones.js';
 
-let peces = [];
 let error = null;
 
-try {
-  const data = await getPeces();
-  peces = ordenarCriaturas(data);
-} catch (err) {
-  error = err;
-}
+const pecesAPI = await getPeces();
+const peces = ordenarCriaturas(pecesAPI);
 ---
 
 <Layout title="Leafing Around - Peces">
-    <Header />
-    <Nav />
-    <div class="peces-container">
-        <Sidebar />
+  <Header />
+  <Nav />
 
-        {!error && (
-        <>
-        <script define:vars={{ peces }}>
-            window.criaturas = peces;
-        </script>
+  <main>
+    {error ? (
+      <MensajeError error={error} />
+    ) : (
+      <GridPeces client:load peces={peces} />
+    )}
+  </main>
 
-        <div class="grid-peces">
-            {peces.map((pez) => (
-            <div class="card">
-                <a href="/info">
-                <img src={pez.image_url} />
-                </a>
-            </div>
-            ))}
-        </div>
-        </>
-        )}
-    </div>
-
-    {error && <MensajeError error={error} />}
-    <Footer />
+  <Footer />
 </Layout>
-
-<style>
-    .peces-container {
-        display: grid;
-        grid-template-columns: 260px 1fr 260px;
-    }
-
-    .grid-peces {
-        display: grid;
-        grid-template-columns: repeat(11, 1fr);
-        gap: 0.5rem;
-        max-width: 56rem;
-        margin: 1.25rem auto;
-        padding: 0.625rem;
-    }
-
-    .card {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border: 3px solid rgba(0, 0, 0, 0.5);
-        background: #F6F1E8;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        aspect-ratio: 1 / 1;
-    }
-
-    .card img {
-        width: 5rem;
-        display: block;
-        margin: 0 auto;
-    }
-
-    .card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0.25rem 0.625rem rgba(0,0,0,0.15);
-        background: #E8DDCF;;
-    }
-
-    @media (max-width: 1024px) {
-    .grid-peces {
-        grid-template-columns: repeat(8, 1fr);
-    }
-    }
-
-    @media (max-width: 768px) {
-    .grid-peces {
-        grid-template-columns: repeat(5, 1fr);
-    }
-    }
-
-    @media (max-width: 480px) {
-    .grid-peces {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    }
-
-    @media (max-width: 900px) {
-    .peces-container {
-        grid-template-columns: 1fr;
-    }
-}
-</style>

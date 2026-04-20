@@ -2,44 +2,44 @@
 
 ---
 <aside class="sidebar">
-  <div class="card">
+  <div class="sidebar-card">
     <h2>Filtros</h2>
 
     <section class="group">
       <h3>Hemisferio</h3>
-      <button onclick="setFiltro('hemisferio', 'todos')">Todos</button>
-      <button onclick="setFiltro('hemisferio', 'norte')">Norte</button>
-      <button onclick="setFiltro('hemisferio', 'sur')">Sur</button>
+      <button data-filtro data-tipo="hemisferio" data-valor="todos">Todos</button>
+      <button data-filtro data-tipo="hemisferio" data-valor="north">Norte</button>
+      <button data-filtro data-tipo="hemisferio" data-valor="south">Sur</button>
     </section>
 
     <section class="group">
       <h3>Mes</h3>
-      <select onchange="setFiltro('mes', this.value)">
+      <select data-filtro data-tipo="mes" data-valor="mes">
         <option value="todos">Todos</option>
-        <option value="enero">Enero</option>
-        <option value="febrero">Febrero</option>
-        <option value="marzo">Marzo</option>
-        <option value="abril">Abril</option>
-        <option value="mayo">Mayo</option>
-        <option value="junio">Junio</option>
-        <option value="julio">Julio</option>
-        <option value="agosto">Agosto</option>
-        <option value="septiembre">Septiembre</option>
-        <option value="octubre">Octubre</option>
-        <option value="noviembre">Noviembre</option>
-        <option value="diciembre">Diciembre</option>
+        <option value="1">Enero</option>
+        <option value="2">Febrero</option>
+        <option value="3">Marzo</option>
+        <option value="4">Abril</option>
+        <option value="5">Mayo</option>
+        <option value="6">Junio</option>
+        <option value="7">Julio</option>
+        <option value="8">Agosto</option>
+        <option value="9">Septiembre</option>
+        <option value="10">Octubre</option>
+        <option value="11">Noviembre</option>
+        <option value="12">Diciembre</option>
       </select>
     </section>
 
     <section class="group">
       <h3>Hora del día</h3>
-      <button onclick="setFiltro('hora', 'todos')">Todas</button>
-      <button onclick="setFiltro('hora', 'manana')">Mañana</button>
-      <button onclick="setFiltro('hora', 'tarde')">Tarde</button>
-      <button onclick="setFiltro('hora', 'noche')">Noche</button>
+      <button data-filtro data-tipo="hora" data-valor="todos">Todas</button>
+      <button data-filtro data-tipo="hora" data-valor="manana">Mañana</button>
+      <button data-filtro data-tipo="hora" data-valor="tarde">Tarde</button>
+      <button data-filtro data-tipo="hora" data-valor="noche">Noche</button>
     </section>
 
-    <button class="reset" onclick="resetFiltros()">Reset</button>
+    <button class="reset" data-reset>Reset</button>
   </div>
 </aside>
 
@@ -54,7 +54,7 @@
         background: #F6F1E8;
     }
 
-    .card {
+    .sidebar-card {
         background: #F6F1E8;
         border: 3px solid rgba(0, 0, 0, 0.5);
         box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
@@ -83,49 +83,56 @@
         font-weight: 500;
     }
 
-    button {
+    .sidebar button {
         padding: 0.4rem;
         border: 1px solid rgba(0, 0, 0, 0.4);
         background: white;
         cursor: pointer;
-        transition: 0.2s ease;
         border-radius: 10px;
+        transition: 0.2s ease;
+        color: black;
     }
 
-    button:hover {
+    .sidebar button:hover:not(.activo):not(.reset) {
         background: #E8DDCF;
     }
 
-    select {
+    .sidebar select {
         padding: 0.4rem;
         border: 1px solid rgba(0, 0, 0, 0.4);
         background: white;
+        border-radius: 10px;
     }
 
-    .reset {
+    .sidebar .activo {
+        background: #2E2A27;
+        color: white;
+        border-color: #2E2A27;
+    }
+
+    .sidebar .reset {
         margin-top: 0.5rem;
-        background: #333;
+        background: #2E2A27;
         color: white;
         border: none;
     }
 
     @media (max-width: 900px) {
-        .sidebar {
-            width: 100%;
-            position: relative;
-            top: 0;
+    .sidebar {
+        width: 100%;
+        position: relative;
+        top: 0;
         }
+    }
+    .sidebar-card {
+        flex-direction: column;
+    }
 
-        .card {
-            flex-direction: column;
-        }
+    .group {
+        width: 100%;
+    }
 
-        .group {
-            width: 100%;
-        }
-
-        .reset {
-            width: 100%;
-        }
+    .reset {
+        width: 100%;
     }
 </style>
