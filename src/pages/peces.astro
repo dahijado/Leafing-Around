@@ -9,9 +9,14 @@ import MensajeError from '../components/mensajeError.astro';
 import { getPeces,ordenarCriaturas } from '../lib/funciones.js';
 
 let error = null;
+let peces = []
 
-const pecesAPI = await getPeces();
-const peces = ordenarCriaturas(pecesAPI);
+try {
+  const pecesAPI = await getPeces();
+  peces = ordenarCriaturas(pecesAPI);
+} catch (err) {
+  error = err;
+}
 ---
 
 <Layout title="Leafing Around - Peces">
@@ -19,11 +24,13 @@ const peces = ordenarCriaturas(pecesAPI);
   <Nav />
 
   <main>
-    {error ? (
-      <MensajeError error={error} />
-    ) : (
-      <GridPeces client:load peces={peces} />
-    )}
+    <div class="grid-envoltorio">
+      {error ? (
+        <MensajeError error={error} />
+      ) : (
+        <GridPeces client:load peces={peces} />
+      )}
+    </div>
   </main>
 
   <Footer />

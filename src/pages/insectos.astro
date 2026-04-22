@@ -2,113 +2,36 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/header.astro';
 import Nav from '../components/nav.astro';
-import Sidebar from '../components/sidebar.astro';
 import Footer from '../components/footer.astro';
+import GridInsectos from '../components/gridInsectos.svelte';
 import MensajeError from '../components/mensajeError.astro';
 
-import {
-  getInsectos,
-  ordenarCriaturas,
-} from "../lib/funciones.js";
+import { getInsectos,ordenarCriaturas } from '../lib/funciones.js';
 
-let insectos = [];
 let error = null;
+let insectos = []
 
 try {
-  const data = await getInsectos();
-  insectos = ordenarCriaturas(data);
+  const insectosAPI = await getInsectos();
+  insectos = ordenarCriaturas(insectosAPI);
 } catch (err) {
   error = err;
 }
 ---
 
 <Layout title="Leafing Around - Insectos">
-    <Header />
-    <Nav />
-    <div class="insectos-container">
-        <Sidebar />
+  <Header />
+  <Nav />
 
-        {!error && (
-        <>
-        <script define:vars={{ insectos }}>
-            window.criaturas = insectos;
-        </script>
-
-        <div class="grid grid-insectos">
-            {insectos.map((insecto) => (
-            <div class="card">
-                <a href="/info">
-                <img src={insecto.image_url} />
-                </a>
-            </div>
-            ))}
-        </div>
-        </>
-        )}
+  <main>
+    <div class="grid-envoltorio">
+      {error ? (
+        <MensajeError error={error} />
+      ) : (
+        <GridInsectos client:load insectos={insectos} />
+      )}
     </div>
+  </main>
 
-    {error && <MensajeError error={error} />}
-    <Footer />
+  <Footer />
 </Layout>
-
-<style>
-    .insectos-container {
-        display: grid;
-        grid-template-columns: 260px 1fr 260px;
-    }
-
-    .grid-insectos {
-        display: grid;
-        grid-template-columns: repeat(11, 1fr);
-        gap: 0.5rem;
-        max-width: 56rem;
-        margin: 1.25rem auto;
-        padding: 0.625rem;
-    }
-
-    .card {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border: 3px solid rgba(0, 0, 0, 0.5);
-        background: #F6F1E8;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        aspect-ratio: 1 / 1;
-    }
-
-    .card img {
-        width: 5rem;
-        display: block;
-        margin: 0 auto;
-    }
-
-    .card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0.25rem 0.625rem rgba(0,0,0,0.15);
-        background: #E8DDCF;;
-    }
-
-    @media (max-width: 1024px) {
-    .grid-insectos {
-        grid-template-columns: repeat(8, 1fr);
-    }
-    }
-
-    @media (max-width: 768px) {
-    .grid-insectos {
-        grid-template-columns: repeat(5, 1fr);
-    }
-    }
-
-    @media (max-width: 480px) {
-    .grid-insectos {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    }
-
-    @media (max-width: 900px) {
-      .insectos-container {
-        grid-template-columns: 1fr;
-    }
-    }
-</style>

@@ -2,114 +2,36 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/header.astro';
 import Nav from '../components/nav.astro';
-import Sidebar from '../components/sidebar.astro';
 import Footer from '../components/footer.astro';
-import MensajeError from "../components/mensajeError.astro";
+import GridCriaturas from '../components/gridCriaturas.svelte';
+import MensajeError from '../components/mensajeError.astro';
 
-import {
-  getCriaturas,
-  ordenarCriaturas,
-} from "../lib/funciones.js";
+import { getCriaturas,ordenarCriaturas } from '../lib/funciones.js';
 
-let criaturas = [];
 let error = null;
+let criaturas = []
 
 try {
-  const data = await getCriaturas();
-  criaturas = ordenarCriaturas(data);
+  const criaturasAPI = await getCriaturas();
+  criaturas = ordenarCriaturas(criaturasAPI);
 } catch (err) {
   error = err;
 }
 ---
 
-<Layout title="Leafing Around - Criaturas Marinas">
+<Layout title="Leafing Around - Peces">
   <Header />
   <Nav />
-    <div class="criaturas-container">
-        <Sidebar />
 
-        {!error && (
-        <>
-        <script define:vars={{ criaturas }}>
-            window.criaturas = criaturas;
-        </script>
-
-        <div class="grid grid-criaturas">
-            {criaturas.map((criatura) => (
-            <div class="card">
-                <a href="/info">
-                <img src={criatura.image_url} />
-                </a>
-            </div>
-            ))}
-        </div>
-        </>
-        )}
+  <main>
+    <div class="grid-envoltorio">
+      {error ? (
+        <MensajeError error={error} />
+      ) : (
+        <GridCriaturas client:load criaturas={criaturas} />
+      )}
     </div>
+  </main>
 
-    {error && <MensajeError error={error} />}
   <Footer />
 </Layout>
-
-<style>
-  .criaturas-container {
-    display: grid;
-    grid-template-columns: 260px 1fr 260px;
-  }
-
-  .grid-criaturas {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 0.5rem;
-    max-width: 56rem;
-    margin: 1.25rem auto;
-    padding: 0.625rem;
-    justify-content: center;
-  }
-
-  .card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 3px solid rgba(0, 0, 0, 0.5);
-    background: #F6F1E8;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    aspect-ratio: 1 / 1;
-  }
-
-  .card img {
-    width: 5rem;
-    display: block;
-    margin: 0 auto;
-  }
-
-  .card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0.25rem 0.625rem rgba(0,0,0,0.15);
-    background: #E8DDCF;
-  }
-
-  @media (max-width: 1024px) {
-    .grid-criaturas {
-        grid-template-columns: repeat(4, 1fr);
-    }
-    }
-
-    @media (max-width: 768px) {
-    .grid-criaturas {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    }
-
-    @media (max-width: 480px) {
-    .grid-criaturas {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    }
-
-    @media (max-width: 900px) {
-      .criaturas-container {
-        grid-template-columns: 1fr;
-    }
-    }
-</style>

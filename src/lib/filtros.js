@@ -53,7 +53,7 @@ export function cumpleLocalizacion(p, filtroLocalizacion) {
   return p.location.includes(filtroLocalizacion);
 }
 
-//
+// Comprueba si la criatura aparece en el mes seleccionado por el usuario.
 export function cumpleMesSeleccionado(p, filtroMes, hemisferio) {
   if (filtroMes === "all") return true;
 
@@ -61,4 +61,22 @@ export function cumpleMesSeleccionado(p, filtroMes, hemisferio) {
   const meses = data?.months_array || [];
 
   return meses.includes(Number(filtroMes));
+}
+
+// Comprueba si el insecto aparece con el clima seleccionado. Compara el string que devuelve la API
+export function cumpleClima(p, filtroClima) {
+  if (filtroClima === "all") return true;
+  return p.weather?.includes(filtroClima);
+}
+
+// Filtra por el tamaño de la sombra de la criatura marina. Compara el string que devuelve la API
+export function cumpleSombra(p, filtroSombra) {
+  if (filtroSombra === "all") return true;
+  return p.shadow_size === filtroSombra;
+}
+
+// Filtra por la velocidad de movimiento de la criatura marina. Compara el string que devuelve la API
+export function cumpleMovimiento(p, filtroMovimiento) {
+  if (filtroMovimiento === "all") return true;
+  return p.shadow_movement === filtroMovimiento;
 }
