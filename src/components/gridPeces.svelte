@@ -240,11 +240,12 @@
     justify-content: center;
     align-items: center;
     border: 3px solid rgba(0, 0, 0, 0.5);
-    background: #f6f1e8;
+    background:  #F5F0D8;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     aspect-ratio: 1 / 1;
     text-decoration: none;
     color: inherit;
+    border-radius:16px;
   }
 
   :global(.card img) {
@@ -257,7 +258,8 @@
   :global(.card:hover) {
     transform: scale(1.05);
     box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.15);
-    background: #e8ddcf;
+    border: 3px solid #ffa200;
+    background: #D8CEBA;
   }
 
   .sidebar {
@@ -267,14 +269,14 @@
     top: 1rem;
     height: fit-content;
     z-index: 10;
-    background: #f6f1e8;
+    background: transparent;
   }
 
   .sidebar-card {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    background: #f6f1e8;
+    background: #F5F0D8;
     border: 3px solid rgba(0, 0, 0, 0.5);
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
     border-radius: 16px;

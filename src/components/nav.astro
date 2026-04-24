@@ -13,8 +13,27 @@
 
 
 <style>
-    .nav {
-        background-color: #E8DDCF;
+    .nav{
+        background:#C49A6C;
+        position:relative;
+        padding:.2rem 0;
+        border-top:4px solid #8B633E;
+    }
+
+    .nav::before{
+        content:"";
+        position:absolute;
+        left:0;
+        right:0;
+        top:0;
+        height:8px;
+
+        background:
+        linear-gradient(
+            to bottom,
+            #8B633E 0%,
+            #9A724B 100%
+        );
     }
 
     .header-nav ul {
@@ -30,7 +49,7 @@
         color: #2E2A27;
         font-family: "Fredoka", sans-serif;
         font-weight: 500;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         transition: transform 0.3s ease-in-out;
         margin: 0.5rem;
     }

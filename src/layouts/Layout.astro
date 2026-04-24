@@ -2,6 +2,7 @@
 import { ClientRouter } from 'astro:transitions';
 import "@/styles/starwind.css";
 const {title} = Astro.props;
+import fondo from "../assets/fondo-web-papel.png";
 ---
 
 <!doctype html>
@@ -41,7 +42,12 @@ const {title} = Astro.props;
 	body {
 		display: grid;
 		grid-template-rows: 10rem auto 1fr auto;
-		background-color: #F6F1E8;
+		background-image: url("/src/assets/fondo-web-papel.png");
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-attachment: fixed;
+  		position: relative;
 	}
 
 	::view-transition-old(root),

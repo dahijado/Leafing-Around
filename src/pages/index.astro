@@ -3,12 +3,349 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/header.astro';
 import Nav from '../components/nav.astro';
 import Footer from '../components/footer.astro';
-import Sidebar from '../components/sidebar.astro';
+
+import {
+  getPeces,
+  getInsectos,
+  getCriaturas
+} from '../lib/funciones.js';
+
+import {
+  calcularRarezasDelMes,
+  numeroCriaturasMes,
+  calcularSeVanEsteMes
+} from '../lib/home.js';
+
+const mesActual = new Date().getMonth() + 1;
+const mesSiguiente = mesActual === 12 ? 1 : mesActual + 1;
+
+const [peces, insectos, marinas] = await Promise.all([
+  getPeces(),
+  getInsectos(),
+  getCriaturas()
+]);
+
+const rarezasNorte = calcularRarezasDelMes(peces, insectos, marinas, mesActual, "north");
+const rarezasSur = calcularRarezasDelMes(peces, insectos, marinas, mesActual, "south");
+
+const statsNorte = numeroCriaturasMes(peces, insectos, marinas, mesActual, "north");
+const statsSur = numeroCriaturasMes(peces, insectos, marinas, mesActual, "south");
+
+const seVan = calcularSeVanEsteMes(
+  peces,
+  insectos,
+  marinas,
+  mesActual,
+  mesSiguiente,
+  "north"
+);
 ---
 
 <Layout title="Leafing Around - Home">
-	<Header />
-	<Nav />
-	<h1>HOME</h1>
-	<Footer />
+
+<Header />
+<Nav />
+
+<main class="contenedor">
+
+  <!-- BIENVENIDA -->
+  <section class="carta bienvenida">
+    <h1>Bienvenido a Leafing Around</h1>
+    <p>
+      La web en la que puedes consultar todo lo que necesites sobre peces, criaturas marinas e insectos de Animal Crossing: New Horizons.
+    </p>
+  </section>
+
+  <!-- RAREZAS -->
+  <section class="carta">
+
+    <h2 class="tituloh2">Rarezas del mes</h2>
+
+    <!-- HEMISFERIO NORTE -->
+    <div class="hemisferio">
+
+      <h3 class="titulo-hemisferio">Hemisferio norte</h3>
+
+      <div class="rarezas-linea">
+        {rarezasNorte.map((c) => (
+          <a href={c.url} class="mini-card" target="_blank" rel="noopener">
+            <img src={c.image_url} alt={c.name} />
+            <span>{c.name}</span>
+          </a>
+        ))}
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="numero">{statsNorte.peces}</span>
+          <span class="label">Peces</span>
+        </div>
+        <div class="stat">
+          <span class="numero">{statsNorte.insectos}</span>
+          <span class="label">Insectos</span>
+        </div>
+        <div class="stat">
+          <span class="numero">{statsNorte.marinas}</span>
+          <span class="label">Criaturas marinas</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- HEMISFERIO SUR -->
+    <div class="hemisferio">
+
+      <h3 class="titulo-hemisferio">Hemisferio sur</h3>
+
+      <div class="rarezas-linea">
+        {rarezasSur.map((c) => (
+          <a href={c.url} class="mini-card" target="_blank" rel="noopener">
+            <img src={c.image_url} alt={c.name} />
+            <span>{c.name}</span>
+          </a>
+        ))}
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="numero">{statsSur.peces}</span>
+          <span class="label">Peces</span>
+        </div>
+        <div class="stat">
+          <span class="numero">{statsSur.insectos}</span>
+          <span class="label">Insectos</span>
+        </div>
+        <div class="stat">
+          <span class="numero">{statsSur.marinas}</span>
+          <span class="label">Criaturas marinas</span>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- EXPLORAR -->
+  <section class="carta">
+
+    <h2 class="tituloh2">Explorar colección</h2>
+
+    <div class="explorar">
+      <a href="/peces" class="portal">Peces</a>
+      <a href="/insectos" class="portal">Insectos</a>
+      <a href="/criaturasMarinas" class="portal">Criaturas marinas</a>
+    </div>
+
+  </section>
+
+  <!-- SE VAN -->
+  <section class="carta compacta">
+
+    <h2 class="titulo2">Se van este mes: </h2>
+
+    <div class="seVan">
+      {seVan.map((c) => (
+        <div class="seVan-card">
+          <img src={c.image_url} alt={c.name} />
+          <span>{c.name}</span>
+        </div>
+      ))}
+    </div>
+
+  </section>
+
+</main>
+<Footer />
 </Layout>
+
+<style>
+	.contenedor {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 2rem;
+		padding: 4rem 1rem;
+		background: transparent;
+	}
+
+	.carta {
+    	background: #F5F0D8;
+		border: 3px solid rgba(0, 0, 0, 0.35);
+		border-radius: 16px;
+		max-width: 900px;
+		width: 100%;
+		padding: 2rem;
+		font-family: "Fredoka", sans-serif;
+		color: #2E2A27;
+		line-height: 1.7;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+	}
+
+	h1 {
+		font-size: 1.6rem;
+		font-weight: 600;
+	}
+
+	.tituloh2 {
+		font-size: 1.3rem;
+		font-weight: 600;
+		margin-bottom: 1rem;
+	}
+
+	.titulo-hemisferio {
+		font-size: 1.05rem;
+		font-weight: 500;
+		margin-bottom: 0.75rem;
+	}
+
+	p {
+		font-size: 1rem;
+		font-weight: 400;
+	}
+
+	.bienvenida {
+		text-align: center;
+	}
+
+	.hemisferio {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		margin-bottom: 2rem;
+	}
+
+	.rarezas-linea {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 0.75rem;
+	}
+
+	.mini-card {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 0.75rem;
+    	background: #F5F0D8;
+		border: 3px solid rgba(0, 0, 0, 0.5);
+		border-radius: 16px;
+		text-decoration: none;
+		color: inherit;
+		transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+	}
+
+	.mini-card:hover {
+		transform: scale(1.05);
+		box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.15);
+		background: #e8ddcf;
+	}
+
+	.mini-card img {
+		width: 5rem;
+		display: block;
+		margin: 0 auto;
+		pointer-events: none;
+	}
+
+	.mini-card span {
+		font-size: 0.85rem;
+		font-weight: 500;
+		margin-top: 0.4rem;
+		text-align: center;
+	}
+
+	.stats {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.6rem;
+	}
+
+	.stat {
+		background: #ffffff;
+		border-radius: 14px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 0.9rem 0.6rem;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+		border: 1px solid rgba(0, 0, 0, 0.06);
+		text-align: center;
+		min-height: 70px;
+	}
+
+	.numero {
+		font-size: 1.9rem;
+		font-weight: 700;
+		font-family: "Fredoka", sans-serif;
+		line-height: 1;
+		color: #2E2A27;
+	}
+
+	.label {
+		font-size: 0.85rem;
+		font-weight: 500;
+		opacity: 0.8;
+		margin-top: 0.25rem;
+	}
+
+	.explorar {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+	}
+
+	.portal {
+		text-align: center;
+		padding: 1.5rem;
+		border-radius: 14px;
+		border: 2px solid rgba(0, 0, 0, 0.3);
+		background: #F6F1E8;
+		text-decoration: none;
+		color: #2E2A27;
+		transition: 0.2s;
+	}
+
+	.portal:hover {
+		transform: scale(1.03);
+		background: #e9dfd2;
+	}
+
+	.compacta {
+		padding: 1.2rem 1.5rem;
+	}
+
+	.seVan {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+		gap: 0.75rem;
+	}
+
+	.seVan-card {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.6rem 0.8rem;
+		background: #fff;
+		border-radius: 12px;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+	}
+
+	.seVan-card img {
+		width: 40px;
+	}
+
+	@media (max-width: 800px) {
+	.rarezas-linea {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.stats {
+		grid-template-columns: 1fr;
+	}
+
+	.explorar {
+		grid-template-columns: 1fr;
+	}
+	}
+</style>
