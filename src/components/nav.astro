@@ -1,23 +1,24 @@
 ---
 const currentPath = Astro.url.pathname;
+const path = currentPath.replace(/\/$/, "");
 ---    
 <div class="nav">
     <nav class="header-nav">
         <ul>
             <li>
-                <a href="/peces" class={currentPath === "/peces" ? "activo" : ""}>
+                <a href="/peces" class={path.startsWith("/peces") ? "activo" : ""}>
                     Peces
                 </a>
             </li>
 
             <li>
-                <a href="/criaturasMarinas" class={currentPath === "/criaturasMarinas" ? "activo" : ""}>
+                <a href="/criaturasMarinas" class={path.startsWith("/criaturasMarinas") ? "activo" : ""}>
                     Criaturas Marinas
                 </a>
             </li>
 
             <li>
-                <a href="/insectos" class={currentPath === "/insectos" ? "activo" : ""}>
+                <a href="/insectos" class={path.startsWith("/insectos") ? "activo" : ""}>
                     Insectos
                 </a>
             </li>
@@ -75,5 +76,6 @@ const currentPath = Astro.url.pathname;
     .header-nav a.activo {
         color: white;
         border-bottom: 3px solid #2E2A27;
+        font-weight: 500;
     }
 </style>
