@@ -1,12 +1,26 @@
 ---
-
+const currentPath = Astro.url.pathname;
 ---    
 <div class="nav">
     <nav class="header-nav">
         <ul>
-            <li><a href="/peces">Peces</a></li>
-            <li><a href="/criaturasMarinas">Criaturas Marinas</a></li>
-            <li><a href="/insectos">Insectos</a></li>
+            <li>
+                <a href="/peces" class={currentPath === "/peces" ? "activo" : ""}>
+                    Peces
+                </a>
+            </li>
+
+            <li>
+                <a href="/criaturasMarinas" class={currentPath === "/criaturasMarinas" ? "activo" : ""}>
+                    Criaturas Marinas
+                </a>
+            </li>
+
+            <li>
+                <a href="/insectos" class={currentPath === "/insectos" ? "activo" : ""}>
+                    Insectos
+                </a>
+            </li>
         </ul>
     </nav>
 </div>
@@ -56,5 +70,10 @@
 
     .header-nav a:hover {
         transform: scale(1.1);
+    }
+
+    .header-nav a.activo {
+        color: white;
+        border-bottom: 3px solid #2E2A27;
     }
 </style>

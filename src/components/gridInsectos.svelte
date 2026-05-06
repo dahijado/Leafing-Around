@@ -197,6 +197,7 @@
           }}
         >
           <img src={i.image_url} alt={i.name} />
+          <span class="nombre">{i.name}</span>
         </a>
 
       {/each}
@@ -223,16 +224,19 @@
 
   .insectos-container {
     display: grid;
-    grid-template-columns: 260px 1fr 260px;
+    grid-template-columns: 220px minmax(0, 1fr) 220px;;
     gap: 1rem;
+    column-gap: 3.5rem;
   }
 
   .grid {
     display: grid;
-    gap: 0.5rem;
-    max-width: 56rem;
-    margin: 1.25rem auto;
-    padding: 0.625rem;
+    gap: 0.6rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 1rem auto;
+    padding: 0.75rem;
   }
 
   .grid-envoltorio {
@@ -242,34 +246,24 @@
   }
 
   .grid-insectos {
-    grid-template-columns: repeat(11, 1fr);
-  }
-
-  
-  .hemisferio {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+    align-items: stretch;
   }
 
   :global(.card) {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    border: 3px solid rgba(0, 0, 0, 0.5);
-    background:  #F5F0D8;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
     aspect-ratio: 1 / 1;
+    border: 3px solid rgba(0, 0, 0, 0.5);
+    background: #F5F0D8;
+    border-radius: 16px;
+    padding: 0.6rem;
+    box-sizing: border-box;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     text-decoration: none;
     color: inherit;
-    border-radius:16px;
-  }
-
-  :global(.card img) {
-    width: 5rem;
-    display: block;
-    margin: 0 auto;
-    pointer-events: none;
   }
 
   :global(.card:hover) {
@@ -277,6 +271,28 @@
     box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.15);
     border: 3px solid #ffa200;
     background: #D8CEBA;
+  }
+
+  :global(.card img) {
+    width: 55%;
+    height: 55%;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .nombre {
+    font-family: "Fredoka", sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    line-height: 1.1;
+    padding: 0 0.2rem;
+    min-height: 3rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
   }
 
   .sidebar {
@@ -287,16 +303,19 @@
     height: fit-content;
     z-index: 10;
     background: transparent;
+    align-self: start;
   }
 
   .sidebar-card {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
     background: #F5F0D8;
     border: 3px solid rgba(0, 0, 0, 0.5);
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
     border-radius: 16px;
+
     padding: 1rem;
   }
 
@@ -321,22 +340,10 @@
     border: none;
   }
 
-  @media (max-width: 1024px) {
-    .grid-insectos {
-      grid-template-columns: repeat(8, 1fr);
-    }
-  }
-
-  @media (max-width: 768px) {
-    .grid-insectos {
-      grid-template-columns: repeat(5, 1fr);
-    }
-  }
-
-  @media (max-width: 480px) {
-    .grid-insectos {
-      grid-template-columns: repeat(2, 1fr);
-    }
+  .hemisferio {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
   }
 
   @media (max-width: 900px) {
@@ -349,6 +356,24 @@
       width: 100%;
       top: auto;
       order: -1;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .grid-insectos {
+      grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+    }
+  }
+
+  @media (max-width: 768px) {
+    .grid-insectos {
+      grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
+    }
+  }
+
+  @media (max-width: 480px) {
+    .grid-insectos {
+      grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
     }
   }
 </style>
