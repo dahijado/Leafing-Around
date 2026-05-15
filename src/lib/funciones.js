@@ -34,24 +34,22 @@ async function fetchNookipedia(endpoint) {
     );
 
     if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
+      console.warn(`HTTP ${res.status} en endpoint ${endpoint}`);
+      return [];
     }
 
     const data = await res.json();
 
     const result = Array.isArray(data) ? data : [];
 
-    cache[endpoint] = result;
+    if (result.length > 0) {
+      cache[endpoint] = result;
+    }
 
     return result;
   } catch (err) {
     console.error(`Error fetching ${endpoint}:`, err);
-
-    if (err.message === "Timeout") {
-      throw new Error("La conexión ha tardado demasiado. Inténtalo de nuevo.");
-    }
-
-    throw new Error("No se pudieron cargar los datos. Inténtalo de nuevo.");
+    return [];
   }
 }
 
@@ -77,4 +75,47 @@ export function getInsectos() {
 // Ordena las criaturas según el orden que aparece en la api
 export function ordenarCriaturas(data) {
   return [...data].sort((a, b) => (a.number ?? 0) - (b.number ?? 0));
+}
+
+// Crear slugs para URL dinámicas (elimina espacios problemáticos, acentos, etc.)
+export function crearSlug(nombre) {
+  return nombre
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/'/g, "")
+    .replace(/\s+/g, "-");
+}
+
+// Ontiene la información de todas las criaturas y utiliza el slug para convertir el nombre en algo válido para la URL
+export async function getTodasCriaturas() {
+  const [peces, insectos, criaturas] = await Promise.allSettled([
+    getPeces(),
+    getInsectos(),
+    getCriaturas(),
+  ]);
+
+  const safe = (result) => (result.status === "fulfilled" ? result.value : []);
+
+  const todas = [
+    ...safe(peces).map((p) => ({
+      ...p,
+      type: "fish",
+      slug: `fish-${crearSlug(p.name)}`,
+    })),
+
+    ...safe(insectos).map((i) => ({
+      ...i,
+      type: "bug",
+      slug: `bug-${crearSlug(i.name)}`,
+    })),
+
+    ...safe(criaturas).map((c) => ({
+      ...c,
+      type: "sea_creature",
+      slug: `sea-${crearSlug(c.name)}`,
+    })),
+  ];
+
+  return ordenarCriaturas(todas);
 }

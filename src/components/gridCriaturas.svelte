@@ -183,9 +183,7 @@
         }
 
         <a
-          href={ok ? c.url : null}
-          target={ok ? "_blank" : null}
-          rel={ok ? "noopener noreferrer" : null}
+          href={ok ? `/criatura/${c.slug}` : null}
           class="card"
           class:inactive={!ok}
         >

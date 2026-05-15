@@ -166,9 +166,7 @@
         }
 
         <a
-          href={ok ? p.url : null}
-          target={ok ? "_blank" : null}
-          rel={ok ? "noopener noreferrer" : null}
+          href={ok ? `/criatura/${p.slug}` : null}
           class="card"
           class:inactive={!ok}
           aria-disabled={!ok}

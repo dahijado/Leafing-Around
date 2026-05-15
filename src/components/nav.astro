@@ -1,24 +1,30 @@
 ---
 const currentPath = Astro.url.pathname;
 const path = currentPath.replace(/\/$/, "");
+
+const esPez = path.startsWith("/peces") || path.startsWith("/criatura/fish-");
+
+const esCriaturaMarina = path.startsWith("/criaturasMarinas") || path.startsWith("/criatura/sea-");
+
+const esInsecto = path.startsWith("/insectos") || path.startsWith("/criatura/bug-");
 ---    
 <div class="nav">
     <nav class="header-nav">
         <ul>
             <li>
-                <a href="/peces" class={path.startsWith("/peces") ? "activo" : ""}>
+                <a href="/peces" class={esPez ? "activo" : ""}>
                     Peces
                 </a>
             </li>
 
             <li>
-                <a href="/criaturasMarinas" class={path.startsWith("/criaturasMarinas") ? "activo" : ""}>
+                <a href="/criaturasMarinas" class={esCriaturaMarina ? "activo" : ""}>
                     Criaturas Marinas
                 </a>
             </li>
 
             <li>
-                <a href="/insectos" class={path.startsWith("/insectos") ? "activo" : ""}>
+                <a href="/insectos" class={esInsecto ? "activo" : ""}>
                     Insectos
                 </a>
             </li>

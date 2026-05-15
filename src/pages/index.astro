@@ -16,28 +16,61 @@ import {
   calcularSeVanEsteMes
 } from '../lib/home.js';
 
+import { getTodasCriaturas } from '../lib/funciones.js';
+
 const mesActual = new Date().getMonth() + 1;
 const mesSiguiente = mesActual === 12 ? 1 : mesActual + 1;
 
-const [peces, insectos, marinas] = await Promise.all([
-  getPeces(),
-  getInsectos(),
-  getCriaturas()
-]);
+const todas = await getTodasCriaturas().catch(() => []);
 
-const rarezasNorte = calcularRarezasDelMes(peces, insectos, marinas, mesActual, "north");
-const rarezasSur = calcularRarezasDelMes(peces, insectos, marinas, mesActual, "south");
+const rarezasNorte = calcularRarezasDelMes(
+  todas.filter(c => c.type === "fish"),
+  todas.filter(c => c.type === "bug"),
+  todas.filter(c => c.type === "sea_creature"),
+  mesActual,
+  "north"
+);
 
-const statsNorte = numeroCriaturasMes(peces, insectos, marinas, mesActual, "north");
-const statsSur = numeroCriaturasMes(peces, insectos, marinas, mesActual, "south");
+const rarezasSur = calcularRarezasDelMes(
+  todas.filter(c => c.type === "fish"),
+  todas.filter(c => c.type === "bug"),
+  todas.filter(c => c.type === "sea_creature"),
+  mesActual,
+  "south"
+);
 
-const seVan = calcularSeVanEsteMes(
-  peces,
-  insectos,
-  marinas,
+const statsNorte = numeroCriaturasMes(
+  todas.filter(c => c.type === "fish"),
+  todas.filter(c => c.type === "bug"),
+  todas.filter(c => c.type === "sea_creature"),
+  mesActual,
+  "north"
+);
+
+const statsSur = numeroCriaturasMes(
+  todas.filter(c => c.type === "fish"),
+  todas.filter(c => c.type === "bug"),
+  todas.filter(c => c.type === "sea_creature"),
+  mesActual,
+  "south"
+);
+
+const seVanNorte = calcularSeVanEsteMes(
+  todas.filter(c => c.type === "fish"),
+  todas.filter(c => c.type === "bug"),
+  todas.filter(c => c.type === "sea_creature"),
   mesActual,
   mesSiguiente,
   "north"
+);
+
+const seVanSur = calcularSeVanEsteMes(
+  todas.filter(c => c.type === "fish"),
+  todas.filter(c => c.type === "bug"),
+  todas.filter(c => c.type === "sea_creature"),
+  mesActual,
+  mesSiguiente,
+  "south"
 );
 ---
 
@@ -68,7 +101,7 @@ const seVan = calcularSeVanEsteMes(
 
       <div class="rarezas-linea">
         {rarezasNorte.map((c) => (
-          <a href={c.url} class="mini-card" target="_blank" rel="noopener">
+          <a href={`/criatura/${c.slug}`} class="mini-card">
             <img src={c.image_url} alt={c.name} />
             <span>{c.name}</span>
           </a>
@@ -99,7 +132,7 @@ const seVan = calcularSeVanEsteMes(
 
       <div class="rarezas-linea">
         {rarezasSur.map((c) => (
-          <a href={c.url} class="mini-card" target="_blank" rel="noopener">
+          <a href={`/criatura/${c.slug}`} class="mini-card">
             <img src={c.image_url} alt={c.name} />
             <span>{c.name}</span>
           </a>
@@ -125,6 +158,34 @@ const seVan = calcularSeVanEsteMes(
 
   </section>
 
+  <!-- SE VAN -->
+  <section class="carta compacta">
+	
+	<h3 class="tituloh2">Se van al finalizar el mes, aprovecha para capturarlos!</h3>
+
+    <h2 class="titulo-hemisferio">Hemisferio norte </h2>
+
+    <div class="seVan">
+      {seVanNorte.map((c) => (
+        <a href={`/criatura/${c.slug}`} class="seVan-card">
+          <img src={c.image_url} alt={c.name} />
+          <span>{c.name}</span>
+        </a>
+      ))}
+    </div>
+
+	<h2 class="titulo-hemisferio">Hemisferio sur </h2>
+	<div class="seVan">
+      {seVanSur.map((c) => (
+        <a href={`/criatura/${c.slug}`} class="seVan-card">
+          <img src={c.image_url} alt={c.name} />
+          <span>{c.name}</span>
+        </a>
+      ))}
+    </div>
+
+  </section>
+
   <!-- EXPLORAR -->
   <section class="carta">
 
@@ -138,23 +199,8 @@ const seVan = calcularSeVanEsteMes(
 
   </section>
 
-  <!-- SE VAN -->
-  <section class="carta compacta">
-
-    <h2 class="titulo2">Se van este mes: </h2>
-
-    <div class="seVan">
-      {seVan.map((c) => (
-        <div class="seVan-card">
-          <img src={c.image_url} alt={c.name} />
-          <span>{c.name}</span>
-        </div>
-      ))}
-    </div>
-
-  </section>
-
 </main>
+
 <Footer />
 </Layout>
 
