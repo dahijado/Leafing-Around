@@ -210,21 +210,21 @@ const seVanSur = calcularSeVanEsteMes(
 		flex-direction: column;
 		align-items: center;
 		gap: 2rem;
-		padding: 4rem 1rem;
+		padding: 1.25rem;
 		background: transparent;
 	}
 
 	.carta {
-    	background: #F5F0D8;
-		border: 3px solid rgba(0, 0, 0, 0.35);
-		border-radius: 16px;
-		max-width: 900px;
 		width: 100%;
-		padding: 2rem;
+		max-width: 1100px;
+		background: #F5F0D8;
+		border-radius: 24px;
+		padding: 1.5rem 2rem;
+		border: 3px solid rgba(0,0,0,0.3);
+		box-shadow: 0 8px 24px rgba(0,0,0,0.1);
 		font-family: "Fredoka", sans-serif;
 		color: #2E2A27;
 		line-height: 1.7;
-		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 	}
 
 	h1 {
@@ -358,7 +358,14 @@ const seVanSur = calcularSeVanEsteMes(
 	}
 
 	.compacta {
-		padding: 1.2rem 1.5rem;
+		padding: 1.5rem 2rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	.compacta .titulo-hemisferio {
+		margin-bottom: 0.9rem;
 	}
 
 	.seVan {
@@ -375,6 +382,16 @@ const seVanSur = calcularSeVanEsteMes(
 		background: #fff;
 		border-radius: 12px;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+		text-decoration: none;
+		color: inherit;
+		transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+	}
+
+
+	.seVan-card:hover {
+		transform: scale(1.05);
+		box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.15);
+		background: #e8ddcf;
 	}
 
 	.seVan-card img {
