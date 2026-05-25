@@ -55,56 +55,56 @@
   <aside class="sidebar">
     <div class="sidebar-card">
 
+      <!-- MES -->
+      <div class="filtro-grupo">
+        <h3>Month: </h3>
+
+        <select bind:value={filtroMes}>
+          <option value="all">All</option>
+          <option value="1">January</option>
+          <option value="2">February</option>
+          <option value="3">March</option>
+          <option value="4">April</option>
+          <option value="5">May</option>
+          <option value="6">June</option>
+          <option value="7">July</option>
+          <option value="8">August</option>
+          <option value="9">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+      </div>
+
       <!-- HEMISFERIO -->
       <div class="filtro-grupo">
-        <h3>Hemisferio: </h3>
+        <h3>Hemisphere: </h3>
 
         <div class="hemisferio">
           <button
             class:activo={hemisferio === "north"}
             on:click={() => hemisferio = "north"}
           >
-            Norte
+            North
           </button>
 
           <button
             class:activo={hemisferio === "south"}
             on:click={() => hemisferio = "south"}
           >
-            Sur
+            South
           </button>
         </div>
       </div>
 
-      <!-- MES -->
-      <div class="filtro-grupo">
-        <h3>Mes del año: </h3>
-
-        <select bind:value={filtroMes}>
-          <option value="all">Todos</option>
-          <option value="1">Enero</option>
-          <option value="2">Febrero</option>
-          <option value="3">Marzo</option>
-          <option value="4">Abril</option>
-          <option value="5">Mayo</option>
-          <option value="6">Junio</option>
-          <option value="7">Julio</option>
-          <option value="8">Agosto</option>
-          <option value="9">Septiembre</option>
-          <option value="10">Octubre</option>
-          <option value="11">Noviembre</option>
-          <option value="12">Diciembre</option>
-        </select>
-      </div>
-
-      <h3>Otros filtros: </h3>
+      <h3>Other Filters: </h3>
 
       <!-- MES ACTUAL -->
       <button
         class:activo={soloMesActual}
         on:click={() => soloMesActual = !soloMesActual}
       >
-        Mes actual
+        Current Month
       </button>
 
       <!-- HORA ACTUAL -->
@@ -112,33 +112,33 @@
         class:activo={soloHoraActual}
         on:click={() => soloHoraActual = !soloHoraActual}
       >
-        Hora actual
+        Current Time
       </button>
 
       <!-- SOMBRA -->
       <div class="filtro-grupo">
-        <h3>Tamaño sombra: </h3>
+        <h3>Shadow size: </h3>
 
         <select bind:value={filtroSombra}>
-          <option value="all">Todos</option>
-          <option value="Small">Pequeño</option>
-          <option value="Medium">Mediano</option>
-          <option value="Large">Grande</option>
-          <option value="Very large">Muy grande</option>
+          <option value="all">All</option>
+          <option value="Small">Small</option>
+          <option value="Medium">Medium</option>
+          <option value="Large">Large</option>
+          <option value="Very large">Very large</option>
         </select>
       </div>
 
       <!-- MOVIMIENTO -->
       <div class="filtro-grupo">
-        <h3>Velocidad: </h3>
+        <h3>Speed: </h3>
 
         <select bind:value={filtroMovimiento}>
-          <option value="all">Todos</option>
-          <option value="Stationary">Quieto</option>
-          <option value="Slow">Lento</option>
-          <option value="Medium">Medio</option>
-          <option value="Fast">Rápido</option>
-          <option value="Very fast">Muy rápido</option>
+          <option value="all">All</option>
+          <option value="Stationary">Stationary</option>
+          <option value="Slow">Slow</option>
+          <option value="Medium">Medium</option>
+          <option value="Fast">Fast</option>
+          <option value="Very fast">Very fast</option>
         </select>
       </div>
 

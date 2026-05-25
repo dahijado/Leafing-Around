@@ -54,91 +54,91 @@
   <aside class="sidebar">
     <div class="sidebar-card">
 
+      <!-- MES -->
+      <div class="filtro-grupo">
+        <h3>Month: </h3>
+
+        <select bind:value={filtroMes}>
+          <option value="all">All</option>
+          <option value="1">January</option>
+          <option value="2">February</option>
+          <option value="3">March</option>
+          <option value="4">April</option>
+          <option value="5">May</option>
+          <option value="6">June</option>
+          <option value="7">July</option>
+          <option value="8">August</option>
+          <option value="9">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+      </div>
+
       <!-- HEMISFERIO -->
       <div class="filtro-grupo">
-        <h3>Hemisferio: </h3>
+        <h3>Hemisphere: </h3>
 
         <div class="hemisferio">
           <button
             class:activo={hemisferio === "north"}
             on:click={() => hemisferio = "north"}
           >
-            Norte
+            North
           </button>
 
           <button
             class:activo={hemisferio === "south"}
             on:click={() => hemisferio = "south"}
           >
-            Sur
+            South
           </button>
         </div>
       </div>
 
-      <!-- MES -->
-      <div class="filtro-grupo">
-        <h3>Mes del año: </h3>
-
-        <select bind:value={filtroMes}>
-          <option value="all">Todos</option>
-          <option value="1">Enero</option>
-          <option value="2">Febrero</option>
-          <option value="3">Marzo</option>
-          <option value="4">Abril</option>
-          <option value="5">Mayo</option>
-          <option value="6">Junio</option>
-          <option value="7">Julio</option>
-          <option value="8">Agosto</option>
-          <option value="9">Septiembre</option>
-          <option value="10">Octubre</option>
-          <option value="11">Noviembre</option>
-          <option value="12">Diciembre</option>
-        </select>
-      </div>
-
       <!-- OTROS -->
-      <h3>Otros filtros: </h3>
+      <h3>Other filters: </h3>
 
       <button
         class:activo={soloMesActual}
         on:click={() => soloMesActual = !soloMesActual}
       >
-        Mes actual
+        Current Month
       </button>
 
       <button
         class:activo={soloHoraActual}
         on:click={() => soloHoraActual = !soloHoraActual}
       >
-        Hora actual
+        Current Time
       </button>
 
       <!-- LOCALIZACIÓN -->
       <div class="filtro-grupo">
-        <h3>Localización: </h3>
+        <h3>Location: </h3>
 
         <select bind:value={filtroLocalizacion}>
-            <option value="all">Todas</option>
-            <option value="Flying">Volando</option>
-            <option value="On trees">Árboles</option>
-            <option value="On the ground">Suelo</option>
-            <option value="On flowers">Flores</option>
-            <option value="On tree stumps">Tocones</option>
-            <option value="On palm trees">Palmeras</option>
-            <option value="On rocks">Rocas</option>
-            <option value="Underground">Subterráneo</option>
+            <option value="all">All</option>
+            <option value="Flying">Flying</option>
+            <option value="On trees">On trees</option>
+            <option value="On the ground">On the ground</option>
+            <option value="On flowers">On flowers</option>
+            <option value="On tree stumps">On tree stumps</option>
+            <option value="On palm trees">On palm trees</option>
+            <option value="On rocks">On rocks</option>
+            <option value="Underground">Underground</option>
         </select>
       </div>
 
       <!-- CLIMA -->
       <div class="filtro-grupo">
-        <h3>Clima: </h3>
+        <h3>Weather: </h3>
 
         <select bind:value={filtroClima}>
-            <option value="all">Todos</option>
-            <option value="Rain">Lluvia</option>
-            <option value="Any except rain">Sin lluvia</option>
-            <option value="Any">Cualquiera</option>
+            <option value="all">All</option>
+            <option value="Rain">Rain</option>
+            <option value="Any except rain">Any except rain</option>
+            <option value="Any">Any</option>
         </select>
       </div>
 

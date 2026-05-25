@@ -4,7 +4,7 @@ import blathersError from "../assets/Blathers-error.png";
 
 const { error = null} = Astro.props;
 
-const mensaje = error?.message || error || "¡Uhu! Algo salió mal... Inténtalo de nuevo más tarde";
+const mensaje = error?.message || error || "¡Uhu! Something went wrong... Please try again later";
 ---
 
 <div class="fondo-error">

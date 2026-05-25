@@ -83,21 +83,21 @@ const seVanSur = calcularSeVanEsteMes(
 
   <!-- BIENVENIDA -->
   <section class="carta bienvenida">
-    <h1>Bienvenido a Leafing Around</h1>
+    <h1>Welcome to Leafing Around</h1>
     <p>
-      La web en la que puedes consultar todo lo que necesites sobre peces, criaturas marinas e insectos de Animal Crossing: New Horizons.
+      The website where you can find everything you need to know about fish, sea creatures, and bugs from Animal Crossing: New Horizons.
     </p>
   </section>
 
   <!-- RAREZAS -->
   <section class="carta">
 
-    <h2 class="tituloh2">Rarezas del mes</h2>
+    <h2 class="tituloh2">This Month's Rarities</h2>
 
     <!-- HEMISFERIO NORTE -->
     <div class="hemisferio">
 
-      <h3 class="titulo-hemisferio">Hemisferio norte</h3>
+      <h3 class="titulo-hemisferio">Northern Hemisphere</h3>
 
       <div class="rarezas-linea">
         {rarezasNorte.map((c) => (
@@ -111,15 +111,15 @@ const seVanSur = calcularSeVanEsteMes(
       <div class="stats">
         <div class="stat">
           <span class="numero">{statsNorte.peces}</span>
-          <span class="label">Peces</span>
+          <span class="label">Fish</span>
         </div>
         <div class="stat">
           <span class="numero">{statsNorte.insectos}</span>
-          <span class="label">Insectos</span>
+          <span class="label">Bugs</span>
         </div>
         <div class="stat">
           <span class="numero">{statsNorte.marinas}</span>
-          <span class="label">Criaturas marinas</span>
+          <span class="label">Sea Creatures</span>
         </div>
       </div>
 
@@ -128,7 +128,7 @@ const seVanSur = calcularSeVanEsteMes(
     <!-- HEMISFERIO SUR -->
     <div class="hemisferio">
 
-      <h3 class="titulo-hemisferio">Hemisferio sur</h3>
+      <h3 class="titulo-hemisferio">Southern Hemisphere</h3>
 
       <div class="rarezas-linea">
         {rarezasSur.map((c) => (
@@ -142,15 +142,15 @@ const seVanSur = calcularSeVanEsteMes(
       <div class="stats">
         <div class="stat">
           <span class="numero">{statsSur.peces}</span>
-          <span class="label">Peces</span>
+          <span class="label">Fish</span>
         </div>
         <div class="stat">
           <span class="numero">{statsSur.insectos}</span>
-          <span class="label">Insectos</span>
+          <span class="label">Bugs</span>
         </div>
         <div class="stat">
           <span class="numero">{statsSur.marinas}</span>
-          <span class="label">Criaturas marinas</span>
+          <span class="label">Sea Creatures</span>
         </div>
       </div>
 
@@ -161,9 +161,9 @@ const seVanSur = calcularSeVanEsteMes(
   <!-- SE VAN -->
   <section class="carta compacta">
 	
-	<h3 class="tituloh2">Se van al finalizar el mes, aprovecha para capturarlos!</h3>
+	<h3 class="tituloh2">They'll be gone when the month ends, so catch them while you can!</h3>
 
-    <h2 class="titulo-hemisferio">Hemisferio norte </h2>
+    <h2 class="titulo-hemisferio">Northern Hemisphere </h2>
 
     <div class="seVan">
       {seVanNorte.map((c) => (
@@ -174,7 +174,7 @@ const seVanSur = calcularSeVanEsteMes(
       ))}
     </div>
 
-	<h2 class="titulo-hemisferio">Hemisferio sur </h2>
+	<h2 class="titulo-hemisferio">Southern Hemisphere </h2>
 	<div class="seVan">
       {seVanSur.map((c) => (
         <a href={`/criatura/${c.slug}`} class="seVan-card">
@@ -189,12 +189,12 @@ const seVanSur = calcularSeVanEsteMes(
   <!-- EXPLORAR -->
   <section class="carta">
 
-    <h2 class="tituloh2">Explorar colección</h2>
+    <h2 class="tituloh2">Explore Collection</h2>
 
     <div class="explorar">
-      <a href="/peces" class="portal">Peces</a>
-      <a href="/insectos" class="portal">Insectos</a>
-      <a href="/criaturasMarinas" class="portal">Criaturas marinas</a>
+      <a href="/peces" class="portal">Fish</a>
+      <a href="/insectos" class="portal">Bugs</a>
+      <a href="/criaturasMarinas" class="portal">Sea Creatures</a>
     </div>
 
   </section>

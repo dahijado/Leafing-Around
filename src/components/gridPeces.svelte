@@ -52,57 +52,57 @@
   <aside class="sidebar">
     <div class="sidebar-card">
 
+      <!-- MESES DEL AÑO -->
+      <div class="filtro-grupo">
+        <h3>Month: </h3>
+
+        <select bind:value={filtroMes}>
+          <option value="all">All</option>
+          <option value="1">January</option>
+          <option value="2">February</option>
+          <option value="3">March</option>
+          <option value="4">April</option>
+          <option value="5">May</option>
+          <option value="6">June</option>
+          <option value="7">July</option>
+          <option value="8">August</option>
+          <option value="9">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+      </div>
+
       <!-- HEMISFERIO -->
       <div class="filtro-grupo">
-        <h3>Hemisferio: </h3>
+        <h3>Hemisphere: </h3>
 
         <div class="hemisferio">
           <button
             class:activo={hemisferio === "north"}
             on:click={() => hemisferio = "north"}
           >
-            Norte
+            North
           </button>
 
           <button
             class:activo={hemisferio === "south"}
             on:click={() => hemisferio = "south"}
           >
-            Sur
+            South
           </button>
         </div>
       </div>
 
-      <!-- MESES DEL AÑO -->
-      <div class="filtro-grupo">
-        <h3>Mes del año</h3>
-
-        <select bind:value={filtroMes}>
-          <option value="all">Todos</option>
-          <option value="1">Enero</option>
-          <option value="2">Febrero</option>
-          <option value="3">Marzo</option>
-          <option value="4">Abril</option>
-          <option value="5">Mayo</option>
-          <option value="6">Junio</option>
-          <option value="7">Julio</option>
-          <option value="8">Agosto</option>
-          <option value="9">Septiembre</option>
-          <option value="10">Octubre</option>
-          <option value="11">Noviembre</option>
-          <option value="12">Diciembre</option>
-        </select>
-      </div>
-
       <!-- OTROS FILTROS -->
-      <h3>Otros filtros: </h3>
+      <h3>Other filters: </h3>
 
       <!-- MES ACTUAL -->
       <button
         class:activo={soloMesActual}
         on:click={() => soloMesActual = !soloMesActual}
       >
-        Mes actual
+        Current Month
       </button>
 
       <!-- HORA ACTUAL -->
@@ -110,20 +110,20 @@
         class:activo={soloHoraActual}
         on:click={() => soloHoraActual = !soloHoraActual}
       >
-        Hora actual
+        Current Time
       </button>
 
       <!-- LOCALIZACIÓN -->
       <div class="filtro-grupo">
-        <h3>Localización: </h3>
+        <h3>Location: </h3>
 
         <select bind:value={filtroLocalizacion}>
-          <option value="all">Todas</option>
-          <option value="River">Río</option>
-          <option value="River (clifftop)">Río (acantilado)</option>
-          <option value="Pond">Estanque</option>
-          <option value="Sea">Mar</option>
-          <option value="Pier">Muelle</option>
+          <option value="all">All</option>
+          <option value="River">River</option>
+          <option value="River (clifftop)">River (clifftop)</option>
+          <option value="Pond">Pond</option>
+          <option value="Sea">Sea</option>
+          <option value="Pier">Pier</option>
         </select>
       </div>
 

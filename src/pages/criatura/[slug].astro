@@ -36,9 +36,9 @@ export async function getStaticPaths() {
 const { criatura, anterior, siguiente } = Astro.props;
 
 const meses = [
-  "ENE", "FEB", "MAR", "ABR",
-  "MAY", "JUN", "JUL", "AGO",
-  "SEP", "OCT", "NOV", "DIC"
+  "JAN", "FEB", "MAR", "APR",
+  "MAY", "JUN", "JUL", "AUG",
+  "SEP", "OCT", "NOV", "DEC"
 ];
 
 const volverHref =
@@ -72,12 +72,12 @@ const volverHref =
 
         <div class="nav-centro">
           <a class="volver" href={volverHref}>
-            Volver a {
+            Back to {
               criatura.type === "fish"
-                ? "Peces"
+                ? "Fish"
                 : criatura.type === "bug"
-                ? "Insectos"
-                : "Criaturas marinas"
+                ? "Bugs"
+                : "Sea Creatures"
             }
           </a>
         </div>
@@ -103,35 +103,35 @@ const volverHref =
       <h1>{criatura.name}</h1>
 
       <p class="tipo">
-        {criatura.type === "fish" && "Pez"}
-        {criatura.type === "bug" && "Insecto"}
-        {criatura.type === "sea_creature" && "Criatura marina"}
+        {criatura.type === "fish" && "Fish"}
+        {criatura.type === "bug" && "Bug"}
+        {criatura.type === "sea_creature" && "Sea Creature"}
       </p>
 
       <div class="stats-grid">
 
         <div class="dato">
-          <span class="label">Precio</span>
+          <span class="label">Price</span>
           <span class="valor">{criatura.sell_nook}</span>
         </div>
 
         {criatura.rarity && (
           <div class="dato">
-            <span class="label">Rareza</span>
+            <span class="label">Rarity</span>
             <span class="valor">{criatura.rarity}</span>
           </div>
         )}
 
         {criatura.location && (
           <div class="dato">
-            <span class="label">Localización</span>
+            <span class="label">Location</span>
             <span class="valor">{criatura.location}</span>
           </div>
         )}
 
         {criatura.shadow_size && (
           <div class="dato">
-            <span class="label">Sombra</span>
+            <span class="label">Shadow</span>
             <span class="valor">{criatura.shadow_size}</span>
           </div>
         )}
@@ -141,7 +141,7 @@ const volverHref =
       {criatura.north && (
         <section class="meses-section">
 
-          <h2>Hemisferio Norte</h2>
+          <h2>Northern Hemisphere</h2>
 
           <div class="mes-grid">
             {meses.map((mes, index) => {
@@ -162,7 +162,7 @@ const volverHref =
       {criatura.south && (
         <section class="meses-section">
 
-          <h2>Hemisferio Sur</h2>
+          <h2>Southern Hemisphere</h2>
 
           <div class="mes-grid">
             {meses.map((mes, index) => {
