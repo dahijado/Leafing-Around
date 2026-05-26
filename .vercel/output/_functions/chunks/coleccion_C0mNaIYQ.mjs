@@ -1,8 +1,8 @@
-import { c as createComponent } from './_astro_assets_59PtkQ2R.mjs';
+import { c as createComponent } from './_astro_assets_X2pNmPd1.mjs';
 import 'piccolore';
-import { r as renderComponent, b as renderTemplate, m as maybeRenderHead } from './entrypoint_B1fbPdfE.mjs';
+import { r as renderComponent, b as renderTemplate, m as maybeRenderHead } from './entrypoint_hyDUavzg.mjs';
 import { s as supabase } from './supabase_DkXvc3Im.mjs';
-import { $ as $$Layout, a as $$Header, b as $$Nav, c as $$Footer } from './footer_BwlP6asw.mjs';
+import { $ as $$Layout, a as $$Header, b as $$Nav, c as $$Footer } from './footer_CdDQKt6J.mjs';
 
 const $$Coleccion = createComponent(async ($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$props, $$slots);

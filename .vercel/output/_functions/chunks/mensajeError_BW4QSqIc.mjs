@@ -1,6 +1,6 @@
-import { c as createComponent, $ as $$Image } from './_astro_assets_59PtkQ2R.mjs';
+import { c as createComponent, $ as $$Image } from './_astro_assets_X2pNmPd1.mjs';
 import 'piccolore';
-import { m as maybeRenderHead, r as renderComponent, b as renderTemplate } from './entrypoint_B1fbPdfE.mjs';
+import { m as maybeRenderHead, r as renderComponent, b as renderTemplate } from './entrypoint_hyDUavzg.mjs';
 import { b as blathersError } from './Blathers-error_Srq597jP.mjs';
 
 const $$MensajeError = createComponent(($$result, $$props, $$slots) => {

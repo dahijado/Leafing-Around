@@ -1,7 +1,7 @@
-import { c as createComponent } from './_astro_assets_59PtkQ2R.mjs';
+import { c as createComponent } from './_astro_assets_X2pNmPd1.mjs';
 import 'piccolore';
-import { r as renderComponent, b as renderTemplate, m as maybeRenderHead } from './entrypoint_B1fbPdfE.mjs';
-import { $ as $$Layout, a as $$Header, b as $$Nav, c as $$Footer } from './footer_BwlP6asw.mjs';
+import { r as renderComponent, b as renderTemplate, m as maybeRenderHead } from './entrypoint_hyDUavzg.mjs';
+import { $ as $$Layout, a as $$Header, b as $$Nav, c as $$Footer } from './footer_CdDQKt6J.mjs';
 
 const $$AvisoLegal = createComponent(($$result, $$props, $$slots) => {
   return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "Leafing Around - Aviso Legal", "data-astro-cid-d6xfh23y": true }, { "default": ($$result2) => renderTemplate` ${renderComponent($$result2, "Header", $$Header, { "data-astro-cid-d6xfh23y": true })} ${renderComponent($$result2, "Nav", $$Nav, { "data-astro-cid-d6xfh23y": true })} ${maybeRenderHead()}<div class="contenedor" data-astro-cid-d6xfh23y> <section class="carta" data-astro-cid-d6xfh23y> <h2 class="avisoh2" data-astro-cid-d6xfh23y>Sobre este proyecto:</h2> <p data-astro-cid-d6xfh23y>

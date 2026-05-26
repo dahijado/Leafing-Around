@@ -1,7 +1,7 @@
-import { c as createComponent, $ as $$Image } from './_astro_assets_59PtkQ2R.mjs';
+import { c as createComponent, $ as $$Image } from './_astro_assets_X2pNmPd1.mjs';
 import 'piccolore';
-import { r as renderComponent, b as renderTemplate, c as renderSlot, m as maybeRenderHead } from './entrypoint_B1fbPdfE.mjs';
-import { $ as $$Layout, a as $$Header, b as $$Nav, c as $$Footer } from './footer_BwlP6asw.mjs';
+import { r as renderComponent, b as renderTemplate, c as renderSlot, m as maybeRenderHead } from './entrypoint_hyDUavzg.mjs';
+import { $ as $$Layout, a as $$Header, b as $$Nav, c as $$Footer } from './footer_CdDQKt6J.mjs';
 import { tv } from 'tailwind-variants';
 import { b as blathersError } from './Blathers-error_Srq597jP.mjs';
 

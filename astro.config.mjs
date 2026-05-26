@@ -8,7 +8,7 @@ export default defineConfig({
   output: "server",
 
   adapter: vercel({
-    entrypointResolution: "auto",
+    webAnalytics: { enabled: true },
   }),
 
   vite: {

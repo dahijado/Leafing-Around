@@ -1,6 +1,6 @@
-import { c as createComponent, $ as $$Image } from './_astro_assets_59PtkQ2R.mjs';
+import { c as createComponent, $ as $$Image } from './_astro_assets_X2pNmPd1.mjs';
 import 'piccolore';
-import { l as createRenderInstruction, d as addAttribute, b as renderTemplate, r as renderComponent, n as renderHead, c as renderSlot, m as maybeRenderHead, F as Fragment } from './entrypoint_B1fbPdfE.mjs';
+import { l as createRenderInstruction, d as addAttribute, b as renderTemplate, r as renderComponent, n as renderHead, c as renderSlot, m as maybeRenderHead, F as Fragment } from './entrypoint_hyDUavzg.mjs';
 import 'clsx';
 import { s as supabase } from './supabase_DkXvc3Im.mjs';
 
