@@ -1,4 +1,4 @@
-const API_KEY = "8e61650d-b457-4d63-bf8b-3720886cf748";
+const API_KEY = import.meta.env.NOOKIPEDIA_API_KEY;
 
 /**
  * FUNCIONES DE FETCH
