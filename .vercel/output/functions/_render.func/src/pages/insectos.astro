@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/header.astro';
+import Nav from '../components/nav.astro';
+import Footer from '../components/footer.astro';
+import GridInsectos from '../components/gridInsectos.svelte';
+import MensajeError from '../components/mensajeError.astro';
+
+import {getTodasCriaturas,crearSlug } from '../lib/funciones.js';
+
+let error = null;
+let insectos = []
+
+try {
+  const todas = await getTodasCriaturas().catch(() => []);
+
+  insectos = todas
+    .filter((i) => i.type === "bug")
+    .map((i) => ({
+      ...i,
+      slug: `bug-${crearSlug(i.name)}`
+    }));
+} catch (err) {
+  error = err;
+}
+---
+
+<Layout title="Leafing Around - Insectos">
+  <Header />
+  <Nav />
+
+  <main>
+    <div class="grid-envoltorio">
+      {error ? (
+        <MensajeError error={error} />
+      ) : (
+        <GridInsectos client:load insectos={insectos} />
+      )}
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

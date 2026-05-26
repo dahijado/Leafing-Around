@@ -1,67 +1,129 @@
 ---
+import { supabase } from '../lib/supabase'
+
 const currentPath = Astro.url.pathname;
 const path = currentPath.replace(/\/$/, "");
 
 const esPez = path.startsWith("/peces") || path.startsWith("/criatura/fish-");
-
 const esCriaturaMarina = path.startsWith("/criaturasMarinas") || path.startsWith("/criatura/sea-");
-
 const esInsecto = path.startsWith("/insectos") || path.startsWith("/criatura/bug-");
----    
+
+const esLogin = path === "/login";
+const esColeccion = path === "/coleccion";
+
+// Lectura de cookies para saber si el usuario está conectado
+const accessToken = Astro.cookies.get("sb-access-token")?.value;
+const refreshToken = Astro.cookies.get("sb-refresh-token")?.value;
+
+if (accessToken && refreshToken) {
+  await supabase.auth.setSession({
+    access_token: accessToken,
+    refresh_token: refreshToken,
+  });
+}
+
+const { data: { user } } = await supabase.auth.getUser();
+---
+
 <div class="nav">
-    <nav class="header-nav">
-        <ul>
-            <li>
-                <a href="/peces" class={esPez ? "activo" : ""}>
-                    Fish
-                </a>
-            </li>
+  <nav class="header-nav">
 
-            <li>
-                <a href="/criaturasMarinas" class={esCriaturaMarina ? "activo" : ""}>
-                    Sea Creatures
-                </a>
-            </li>
+    <ul class="nav-links">
+      <li>
+        <a href="/peces" class={esPez ? "activo" : ""}>Fish</a>
+      </li>
+      <li>
+        <a href="/criaturasMarinas" class={esCriaturaMarina ? "activo" : ""}>Sea Creatures</a>
+      </li>
+      <li>
+        <a href="/insectos" class={esInsecto ? "activo" : ""}>Bugs</a>
+      </li>
+    </ul>
 
-            <li>
-                <a href="/insectos" class={esInsecto ? "activo" : ""}>
-                    Bugs
-                </a>
-            </li>
-        </ul>
-    </nav>
+    <ul class="links-usuario">
+      {!user && (
+        <li>
+          <a href="/login" class={esLogin ? "activo" : ""}>
+            Login
+          </a>
+        </li>
+      )}
+
+      {user && (
+        <>
+          <li>
+            <a href="/coleccion" class={esColeccion ? "activo" : ""}>
+              My Collection
+            </a>
+          </li>
+
+          <li>
+            <form action="/api/logout" method="POST" class="logout-form">
+              <button type="submit" class="logout-btn">
+                Logout
+              </button>
+            </form>
+          </li>
+        </>
+      )}
+    </ul>
+
+  </nav>
 </div>
 
-
 <style>
-    .nav{
+    .nav {
         background:#C49A6C;
         position:relative;
         padding:.2rem 0;
         border-top:4px solid #8B633E;
     }
 
-    .nav::before{
+    .nav::before {
         content:"";
         position:absolute;
         left:0;
         right:0;
         top:0;
         height:8px;
-
-        background:
-        linear-gradient(
-            to bottom,
-            #8B633E 0%,
-            #9A724B 100%
-        );
+        background: linear-gradient(to bottom,#8B633E 0%,#9A724B 100%);
     }
 
-    .header-nav ul {
-        display: flex;
-        gap: 2rem;
-        justify-content: center;
-        flex-wrap: wrap;
+  .header-nav {
+          display: grid;
+          /* Tres columnas: espacio lateral, centro, derecha */
+          grid-template-columns: 1fr auto 1fr;
+          align-items: center;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 2rem;
+      }
+
+      .nav-links {
+          grid-column: 2; /* Se posiciona en la columna central */
+          display: flex;
+          gap: 2.5rem;
+          align-items: center;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+      }
+
+      .links-usuario {
+          grid-column: 3; /* Se posiciona en la columna derecha */
+          display: flex;
+          gap: 2rem;
+          align-items: center;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          justify-self: end; /* Fuerza el contenido a la derecha total */
+      }
+
+    .logout-form {
+        display: inline;
+        margin: 0;
+        padding: 0;
     }
 
     .header-nav a {
@@ -70,18 +132,72 @@ const esInsecto = path.startsWith("/insectos") || path.startsWith("/criatura/bug
         color: #2E2A27;
         font-family: "Fredoka", sans-serif;
         font-weight: 500;
-        font-size: 1.2rem;
-        transition: transform 0.3s ease-in-out;
-        margin: 0.5rem;
+        font-size: 1.35rem;
+        padding: 0.4rem 0.6rem;
+        margin: 0 0.3rem;
+        transition: transform 0.25s ease-in-out;
     }
 
     .header-nav a:hover {
-        transform: scale(1.1);
+        transform: scale(1.12);
     }
 
     .header-nav a.activo {
         color: white;
         border-bottom: 3px solid #2E2A27;
-        font-weight: 500;
+        padding-bottom: 0.10rem;
+    }
+
+    .logout-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: "Fredoka", sans-serif;
+      font-size: 1.35rem;
+      font-weight: 500;
+      color: #2E2A27;
+      padding: 0.4rem 0.6rem;
+      transition: transform 0.25s ease-in-out;
+    }
+
+    .logout-btn:hover {
+      transform: scale(1.12);
+    }
+
+    @media (max-width: 768px) {
+        .header-nav {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+
+        .links-usuario {
+            position: static;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .nav-links,
+        .links-usuario {
+            justify-content: center;
+            flex-wrap: wrap;
+        }
     }
 </style>
+
+<script>
+  const logoutForm = document.querySelector('.logout-form');
+  
+  if (logoutForm) {
+    logoutForm.addEventListener('submit', () => {
+      // Al hacer click, se borra el storage que exista
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      // Indicamos al navegador que la próxima carga no use la caché guardada
+      window.addEventListener('unload', () => {
+        location.reload();
+      });
+    });
+  }
+</script>

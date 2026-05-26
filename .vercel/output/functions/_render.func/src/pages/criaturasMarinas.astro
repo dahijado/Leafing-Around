@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/header.astro';
+import Nav from '../components/nav.astro';
+import Footer from '../components/footer.astro';
+import GridCriaturas from '../components/gridCriaturas.svelte';
+import MensajeError from '../components/mensajeError.astro';
+
+import {getTodasCriaturas,crearSlug } from '../lib/funciones.js';
+
+let error = null;
+let criaturas = []
+
+try {
+  const todas = await getTodasCriaturas().catch(() => []);
+
+  criaturas = todas
+    .filter((c) => c.type === "sea_creature")
+    .map((c) => ({
+      ...c,
+      slug: `sea-${crearSlug(c.name)}`
+    }));
+} catch (err) {
+  error = err;
+}
+---
+
+<Layout title="Leafing Around - Peces">
+  <Header />
+  <Nav />
+
+  <main>
+    <div class="grid-envoltorio">
+      {error ? (
+        <MensajeError error={error} />
+      ) : (
+        <GridCriaturas client:load criaturas={criaturas} />
+      )}
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
