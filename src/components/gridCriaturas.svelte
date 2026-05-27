@@ -291,7 +291,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    aspect-ratio: 1 / 1;
+    min-height: 140px;
     border: 3px solid rgba(0, 0, 0, 0.5);
     background: #F5F0D8;
     border-radius: 16px;
@@ -324,8 +324,7 @@
     text-align: center;
     line-height: 1.1;
     width: 100%;
-    padding: 0 0.2rem;
-    padding-bottom: 2.5rem;
+    padding: 0 0.2rem 2.5rem 0.2rem;
     margin-top: auto;
   }
 
@@ -380,7 +379,6 @@
     color: #2E2A27;
     outline: none;
     cursor: pointer;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -388,11 +386,6 @@
     background-repeat: no-repeat;
     background-position: right 1rem center;
     background-size: 1.1rem;
-  }
-
-  .sidebar select:focus {
-    border-color: #8B633E;
-    box-shadow: 0 0 0 3px rgba(139, 99, 62, 0.15);
   }
 
   .filter-btn {
@@ -407,17 +400,6 @@
     width: 100%;
     cursor: pointer;
     box-shadow: 0 3px 0px rgba(139, 99, 62, 0.2);
-    transition: transform 0.1s ease, background-color 0.2s ease, box-shadow 0.1s ease;
-  }
-
-  .filter-btn:hover {
-    background: #FFFDF4;
-    border-color: #8B633E;
-  }
-
-  .filter-btn:active {
-    transform: translateY(2px);
-    box-shadow: 0 1px 0px rgba(139, 99, 62, 0.2);
   }
 
   .filter-btn.activo {
@@ -425,15 +407,6 @@
     background: #8B633E;
     border: 2px solid rgba(0, 0, 0, 0.2);
     box-shadow: 0 4px 0px rgba(0, 0, 0, 0.15);
-  }
-
-  .filter-btn.activo:hover {
-    background: #9A724B;
-  }
-
-  .filter-btn.activo:active {
-    transform: translateY(3px);
-    box-shadow: 0 1px 0px rgba(0, 0, 0, 0.15);
   }
 
   .sidebar .reset-btn {
@@ -448,16 +421,6 @@
     cursor: pointer;
     margin-top: 0.5rem;
     box-shadow: 0 4px 0px rgba(0, 0, 0, 0.15);
-    transition: transform 0.1s ease, background-color 0.2s ease, box-shadow 0.1s ease;
-  }
-
-  .sidebar .reset-btn:hover {
-    background: #9A724B;
-  }
-
-  .sidebar .reset-btn:active {
-    transform: translateY(3px);
-    box-shadow: 0 1px 0px rgba(0, 0, 0, 0.15);
   }
 
   .hemisferio {
@@ -487,15 +450,8 @@
     justify-content: center;
     cursor: pointer;
     border-radius: 8px;
-    transition: border 0.2s ease, color 0.2s ease;
     color: #b0a48d;
     padding: 0;
-  }
-
-  .btn-corazon:hover {
-    border: 2px solid white;
-    background: rgba(93, 84, 69, 0.2); 
-    color: #5d5445;
   }
 
   .btn-corazon.activo {
@@ -583,8 +539,12 @@
       gap: 0.5rem;
     }
     .grid-criaturas {
-      grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
       gap: 0.5rem;
+    }
+    .nombre {
+      font-size: 0.75rem;
+      padding-bottom: 1.8rem;
     }
   }
 
@@ -596,7 +556,7 @@
       grid-template-columns: 1fr;
     }
     .grid-criaturas {
-      grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
     }
   }
 </style>
