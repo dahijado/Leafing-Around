@@ -4,7 +4,7 @@ import Header from '../../components/header.astro';
 import Nav from '../../components/nav.astro';
 import Footer from '../../components/footer.astro';
 import BotonFavorito from '../../components/botonFavorito.astro';
-import { supabase } from '../../lib/supabase';
+import { createServerSupabase } from '../../lib/supabase-server';
 
 import {
   getTodasCriaturas,
@@ -37,6 +37,8 @@ const volverHref =
     : criatura.type === "bug"
     ? "/insectos"
     : "/criaturasMarinas";
+
+const supabase = createServerSupabase(Astro.cookies);
 
 const { data: { user } } = await supabase.auth.getUser();
 

@@ -1,5 +1,5 @@
 ---
-import { supabase } from '../lib/supabase'
+import { createServerSupabase } from '../lib/supabase-server'
 
 const currentPath = Astro.url.pathname;
 const path = currentPath.replace(/\/$/, "");
@@ -11,15 +11,7 @@ const esInsecto = path.startsWith("/insectos") || path.startsWith("/criatura/bug
 const esLogin = path === "/login";
 const esColeccion = path === "/coleccion";
 
-const accessToken = Astro.cookies.get("sb-access-token")?.value;
-const refreshToken = Astro.cookies.get("sb-refresh-token")?.value;
-
-if (accessToken && refreshToken) {
-  await supabase.auth.setSession({
-    access_token: accessToken,
-    refresh_token: refreshToken,
-  });
-}
+const supabase = createServerSupabase(Astro.cookies);
 
 const { data: { user } } = await supabase.auth.getUser();
 ---

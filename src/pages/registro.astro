@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/header.astro';
 import Nav from '../components/nav.astro';
 import Footer from '../components/footer.astro';
-import { supabase } from '../lib/supabase';
+import { createServerSupabase } from '../lib/supabase-server';
 
 let errorMessage = "";
 
@@ -14,22 +14,20 @@ if (Astro.request.method === "POST") {
     const password = formData.get("password")?.toString();
 
     if (email && password) {
-      const { data, error } = await supabase.auth.signUp({ email, password });
+      // Usamos el cliente de servidor
+      const supabase = createServerSupabase(Astro.cookies);
+      
+      const { error } = await supabase.auth.signUp({ 
+        email, 
+        password 
+      });
       
       if (error) {
-
         errorMessage = error.message;
-
-      } else if (data.session) {
-
-        const { access_token, refresh_token } = data.session;
-        Astro.cookies.set("sb-access-token", access_token, { path: "/", httpOnly: true, secure: true });
-        Astro.cookies.set("sb-refresh-token", refresh_token, { path: "/", httpOnly: true, secure: true });
-        
-        return Astro.redirect("/coleccion");
-
       } else {
-        return Astro.redirect("/login");
+        // Al registrarse exitosamente, Supabase ya habrá guardado 
+        // la sesión en las cookies automáticamente gracias a setAll.
+        return Astro.redirect("/coleccion");
       }
     }
   } catch (e) {

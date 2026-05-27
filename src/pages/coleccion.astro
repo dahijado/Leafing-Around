@@ -1,24 +1,16 @@
 ---
-import { supabase } from '../lib/supabase';
+import { createServerSupabase } from '../lib/supabase-server';
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/header.astro';
 import Nav from '../components/nav.astro';
 import Footer from '../components/footer.astro';
 
-const accessToken = Astro.cookies.get("sb-access-token")?.value;
-const refreshToken = Astro.cookies.get("sb-refresh-token")?.value;
+const supabase = createServerSupabase(Astro.cookies);
 
-if (accessToken && refreshToken) {
-  await supabase.auth.setSession({
-    access_token: accessToken,
-    refresh_token: refreshToken,
-  });
-}
+const { data: { user }, error } = await supabase.auth.getUser();
 
-const { data: { user } } = await supabase.auth.getUser();
-
-if (!user) {
-  return Astro.redirect('/login?error=Please log in to access your collection');
+if (error || !user) {
+  return Astro.redirect('/login');
 }
 
 const { data: favoritos } = await supabase

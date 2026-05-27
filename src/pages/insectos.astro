@@ -5,7 +5,7 @@ import Nav from '../components/nav.astro';
 import Footer from '../components/footer.astro';
 import GridInsectos from '../components/gridInsectos.svelte';
 import MensajeError from '../components/mensajeError.astro';
-import { supabase } from '../lib/supabase';
+import { createServerSupabase } from '../lib/supabase-server';
 import { getTodasCriaturas, crearSlug } from '../lib/funciones.js';
 
 interface Favorito {
@@ -17,8 +17,10 @@ let insectos = [];
 let user = null;
 let favoritos: Favorito[] = [];
 
-const { data: { session } } = await supabase.auth.getSession();
-user = session?.user || null;
+const supabase = createServerSupabase(Astro.cookies);
+
+const { data: { user: userData } } = await supabase.auth.getUser();
+user = userData;
 
 if (user) {
   const { data, error: favError } = await supabase
