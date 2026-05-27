@@ -1,6 +1,5 @@
 <script>
   import {
-    obtenerDatos,
     cumpleMes,
     cumpleHora,
     cumpleMesSeleccionado,
@@ -9,6 +8,9 @@
   } from "../lib/filtros.js";
 
   export let criaturas = [];
+  /** @type {null | { id: string }} */
+  export let user = null;
+  export let favoritos = [];
 
   let soloMesActual = false;
   let soloHoraActual = false;
@@ -20,6 +22,7 @@
   const mesActual = new Date().getMonth() + 1;
   const horaActual = new Date().getHours();
 
+  // Convierte el formato de las horas de la API (4am-4pm) a formato 24 horas (0-24)
   function convertirHora(textoHora) {
     const partes = textoHora.trim().split(" ");
     let hora = parseInt(partes[0]);
@@ -31,6 +34,7 @@
     return hora;
   }
 
+  // Comprueba si la hora actual del usuario está dentro de aparición del animal
   function comprobarRango(rango, horaActual, convertirHoraFn) {
     if (!rango || rango === "NA") return false;
     if (rango === "All day") return true;
@@ -173,13 +177,35 @@
           cumpleMovimiento(c, filtroMovimiento)
         }
 
+        {@const esActivo = favoritos.some(f => f.criatura_slug === c.slug)}
+
         <a
           href={ok ? `/criatura/${c.slug}` : null}
           class="card"
           class:inactive={!ok}
+          aria-disabled={!ok}
+          on:click={(e) => {
+            if (!ok) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }}
         >
           <img src={c.image_url} alt={c.name} />
           <span class="nombre">{c.name}</span>
+
+          {#if user}
+          <boton-favorito data-slug={c.slug} data-nombre={c.name} data-imagen={c.image_url} data-tipo="sea_creature">
+            <button 
+              class="btn-corazon {esActivo ? 'activo' : ''}"
+              aria-label={esActivo ? "Quita de favoritos" : "Añade a favoritos"}
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
+          </boton-favorito>
+          {/if}
         </a>
 
       {/each}
@@ -188,6 +214,33 @@
   </div>
 
 </div>
+
+<script context="module">
+  if (typeof window !== 'undefined' && !customElements.get('boton-favorito')) {
+    customElements.define('boton-favorito', class extends HTMLElement {
+      constructor() {
+        super();
+        const boton = this.querySelector('button');
+        boton.addEventListener('click', async (e) => {
+          e.preventDefault(); e.stopPropagation();
+          const esActivo = boton.classList.contains('activo');
+          await fetch('/api/favoritos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              action: esActivo ? 'delete' : 'insert',
+              slug: this.dataset.slug,
+              nombre: this.dataset.nombre,
+              imagen: this.dataset.imagen,
+              tipo: this.dataset.tipo
+            })
+          });
+          boton.classList.toggle('activo');
+        });
+      }
+    });
+  }
+</script>
 
 <style>
   .card.inactive {
@@ -242,10 +295,10 @@
     border: 3px solid rgba(0, 0, 0, 0.5);
     background: #F5F0D8;
     border-radius: 16px;
-    padding: 0.6rem;
+    padding: 0.5rem;
     box-sizing: border-box;
-    overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     text-decoration: none;
     color: inherit;
   }
@@ -258,24 +311,22 @@
   }
 
   :global(.card img) {
-    width: 55%;
-    height: 55%;
+    width: 50%;
+    height: 50%;
     object-fit: contain;
     flex-shrink: 0;
+    margin-top: 0.2rem;
   }
 
   .nombre {
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     text-align: center;
     line-height: 1.1;
+    width: 100%;
     padding: 0 0.2rem;
-    min-height: 3rem;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-    overflow: hidden;
+    padding-bottom: 2.5rem;
+    margin-top: auto;
   }
 
   .sidebar {
@@ -330,11 +381,9 @@
     outline: none;
     cursor: pointer;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
-
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238B633E' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 1rem center;
@@ -417,13 +466,54 @@
     gap: 0.5rem;
   }
 
+  boton-favorito {
+    position: absolute;
+    bottom: 0.4rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+
+  .btn-corazon {
+    background: transparent;
+    border: 2px solid transparent;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: border 0.2s ease, color 0.2s ease;
+    color: #b0a48d;
+    padding: 0;
+  }
+
+  .btn-corazon:hover {
+    border: 2px solid white;
+    background: rgba(93, 84, 69, 0.2); 
+    color: #5d5445;
+  }
+
+  .btn-corazon.activo {
+    color: #ff6b6b;
+  }
+
+  .btn-corazon.activo svg {
+    fill: #ff6b6b;
+    stroke: #5d5445;
+    stroke-width: 2px;
+  }
+
   @media (max-width: 1200px) {
     .criaturas-container {
       margin: 1.25rem;
       gap: 0.75rem;
       column-gap: 1.25rem;
     }
-    
     .grid-criaturas {
       grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
     }
@@ -435,16 +525,13 @@
       margin: 1rem;
       column-gap: 1rem;
     }
-
     .sidebar {
       width: 240px;
     }
-
     .sidebar-card {
       padding: 1.5rem 1.25rem;
       gap: 1.25rem;
     }
-
     .grid-criaturas {
       grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
     }
@@ -456,26 +543,22 @@
       margin: 1rem;
       gap: 1.5rem;
     }
-
     .sidebar {
       position: relative;
       width: 100%;
       top: auto;
       order: -1;
     }
-
     .sidebar-card {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1.25rem;
       padding: 1.75rem;
     }
-
     .sidebar .reset-btn {
       grid-column: span 2;
       margin-top: 0;
     }
-
     .grid-criaturas {
       grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
     }
@@ -486,31 +569,22 @@
       margin: 0.75rem;
       gap: 1rem;
     }
-
     .sidebar-card {
       grid-template-columns: 1fr;
       padding: 1.25rem;
       gap: 1rem;
     }
-
     .sidebar .reset-btn {
       grid-column: span 1;
     }
-
     .botones-flex {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0.5rem;
     }
-
     .grid-criaturas {
       grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
       gap: 0.5rem;
-    }
-
-    .nombre {
-      font-size: 0.8rem;
-      min-height: 2.6rem;
     }
   }
 
@@ -518,11 +592,9 @@
     .criaturas-container {
       margin: 0.5rem;
     }
-
     .botones-flex {
       grid-template-columns: 1fr;
     }
-
     .grid-criaturas {
       grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
     }

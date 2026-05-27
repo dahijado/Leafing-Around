@@ -20,6 +20,30 @@ const { data: { user } } = await supabase.auth.getUser();
 if (!user) {
   return Astro.redirect('/login?error=Please log in to access your collection');
 }
+
+const { data: favoritos } = await supabase
+  .from('favoritos')
+  .select('*')
+  .eq('user_id', user.id)
+  .order('creado_en', { ascending: false });
+
+const favoritosAgrupados: Record<string, any[]> = {
+  fish: favoritos?.filter(f => f.tipo === 'fish') || [],
+  bug: favoritos?.filter(f => f.tipo === 'bug') || [],
+  sea_creature: favoritos?.filter(f => f.tipo === 'sea_creature') || []
+};
+
+const tiposDisponibles = Object.keys(favoritosAgrupados).filter(tipo => favoritosAgrupados[tipo].length > 0);
+const tieneFavoritos = favoritos && favoritos.length > 0;
+
+const formatearTitulo = (tipo: string) => {
+  const nombres: Record<string, string> = {
+    fish: 'Fish',
+    bug: 'Bugs',
+    sea_creature: 'Sea Creatures'
+  };
+  return nombres[tipo] || tipo;
+};
 ---
 
 <Layout title="Leafing Around - My Collection">
@@ -32,56 +56,238 @@ if (!user) {
       <p>Welcome, <strong>{user.email}</strong>! This is your personal space to track your captured creatures.</p>
     </section>
 
-    <section class="carta">
+    <section class="carta" id="contenedor-coleccion">
       <h2 class="tituloh2">Critter List</h2>
-      <p>Lista de favoritos</p>
+
+      {tieneFavoritos ? (
+        <div class="lista-coleccion">
+          {tiposDisponibles.map(tipo => (
+            <div class="seccion-tipo" data-tipo={tipo}>
+              <h3 class="titulo-hemisferio">{formatearTitulo(tipo)}</h3>
+              <div class="rarezas-linea">
+                {favoritosAgrupados[tipo].map((f: any) => (
+                  <article class="mini-card" id={`fav-${f.criatura_slug}`}>
+                    <button class="btn-eliminar" data-slug={f.criatura_slug} aria-label="Eliminar">×</button>
+                    <img src={f.imagen_url} alt={f.nombre} loading="lazy" />
+                    <span>{f.nombre}</span>
+                    <a href={`/criatura/${f.criatura_slug}`} class="btn-detalle">View details</a>
+                  </article>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div class="estado-vacio">
+          <p>Your collection is empty. Start exploring and add some creatures!</p>
+          <div class="explorar">
+            <a href="/peces" class="portal">Fish</a>
+            <a href="/insectos" class="portal">Bugs</a>
+            <a href="/criaturasMarinas" class="portal">Sea Creatures</a>
+          </div>
+        </div>
+      )}
     </section>
   </main>
-
   <Footer />
 </Layout>
 
+<script>
+  function initColeccion() {
+    const contenedor = document.getElementById('contenedor-coleccion');
+    if (!contenedor) return;
+    contenedor.removeEventListener('click', handleEliminar);
+    contenedor.addEventListener('click', handleEliminar);
+  }
+
+  async function handleEliminar(e: Event) {
+    const target = e.target as HTMLElement;
+    const btn = target.closest('.btn-eliminar');
+    if (!btn) return;
+
+    const slug = btn.getAttribute('data-slug');
+    const tarjeta = btn.closest('.mini-card') as HTMLElement | null;
+    const seccion = btn.closest('.seccion-tipo') as HTMLElement | null;
+
+    if (!tarjeta || !seccion) return;
+
+    tarjeta.style.transition = 'all 0.2s ease';
+    tarjeta.style.opacity = '0';
+    tarjeta.style.transform = 'scale(0.5)';
+
+    const response = await fetch('/api/favoritos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'delete', slug })
+    });
+
+    if (response.ok) {
+      setTimeout(() => {
+        tarjeta.remove();
+        const tarjetasRestantes = seccion.querySelectorAll('.mini-card');
+        if (tarjetasRestantes.length === 0) seccion.remove();
+        const seccionesRestantes = document.querySelectorAll('.seccion-tipo');
+        if (seccionesRestantes.length === 0) window.location.reload();
+      }, 200);
+    } else {
+      tarjeta.style.opacity = '1';
+      tarjeta.style.transform = 'scale(1)';
+    }
+  }
+
+  document.addEventListener('astro:page-load', initColeccion);
+</script>
+
 <style>
-    .contenedor {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2rem;
-        padding: 1.25rem;
-        background: transparent;
-    }
+  .contenedor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.25rem;
+  }
 
-    .carta {
-        width: 100%;
-        max-width: 1100px;
-        background: #F5F0D8;
-        border-radius: 24px;
-        padding: 1.5rem 2rem;
-        border: 3px solid rgba(0,0,0,0.3);
-        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-        font-family: "Fredoka", sans-serif;
-        color: #2E2A27;
-        line-height: 1.7;
-    }
+  .carta {
+    width: 100%;
+    max-width: 1100px;
+    background: #F5F0D8;
+    border-radius: 24px;
+    padding: 1.5rem 2rem;
+    border: 3px solid rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    font-family: "Fredoka", sans-serif;
+    color: #2E2A27;
+    text-align: center;
+  }
 
-    h1 {
-        font-size: 1.6rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-    }
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #2E2A27;
+  }
 
-    .tituloh2 {
-        font-size: 1.3rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-    }
+  .tituloh2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #2E2A27;
+  }
 
-    p {
-        font-size: 1rem;
-        font-weight: 400;
-    }
+  .titulo-hemisferio {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 1.5rem 0 1rem;
+    color: #2E2A27;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 0.5rem;
+    display: block;
+    text-align: left;
+  }
 
-    .bienvenida {
-        text-align: center;
-    }
+  .rarezas-linea {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .mini-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    background: #F5F0D8;
+    border: 3px solid rgba(0, 0, 0, 0.5);
+    border-radius: 16px;
+    position: relative;
+    transition: transform 0.2s;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .mini-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.15);
+    background: #e8ddcf;
+  }
+
+  .mini-card img {
+    width: 5rem;
+    pointer-events: none;
+  }
+
+  .mini-card span {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 0.4rem;
+    color: #2E2A27;
+  }
+
+  .btn-eliminar {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #FF6B6B;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+
+  .btn-detalle {
+    margin-top: 0.5rem;
+    color: #2E2A27;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-decoration: none;
+  }
+
+  .btn-detalle:hover {
+    text-decoration: underline;
+  }
+
+  .explorar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .portal {
+    font-family: "Fredoka", sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #FFF;
+    background: #8B633E;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 14px;
+    padding: 0.85rem 1.5rem;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 0px rgba(0, 0, 0, 0.15);
+    transition: transform 0.1s ease, background-color 0.2s ease, box-shadow 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+  }
+
+  .portal:hover {
+    background: #9A724B;
+    text-decoration: none;
+  }
+
+  @media (max-width: 800px) {
+    .rarezas-linea { grid-template-columns: repeat(2, 1fr); }
+    .explorar { grid-template-columns: 1fr; }
+  }
 </style>

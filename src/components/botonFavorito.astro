@@ -1,0 +1,99 @@
+---
+interface Props {
+  slug: string;
+  nombre: string;
+  imagenUrl: string;
+  tipo: string;
+  esFavoritoInicial: boolean;
+}
+
+const { slug, nombre, imagenUrl, tipo, esFavoritoInicial } = Astro.props;
+---
+
+<boton-favorito 
+  data-slug={slug} 
+  data-nombre={nombre}
+  data-imagen={imagenUrl}
+  data-tipo={tipo}
+>
+  <button class={`btn-favorito ${esFavoritoInicial ? "activo" : ""}`}>
+    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" class="icono-corazon">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+    </svg>
+  </button>
+</boton-favorito>
+
+<script>
+  class BotonFavorito extends HTMLElement {
+    constructor() {
+      super();
+      const boton = this.querySelector('button') as HTMLButtonElement;
+      
+      boton.addEventListener('click', async () => {
+        const esActivo = boton.classList.contains('activo');
+        
+        const response = await fetch('/api/favoritos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            action: esActivo ? 'delete' : 'insert',
+            slug: this.dataset.slug,
+            nombre: this.dataset.nombre,
+            imagen: this.dataset.imagen,
+            tipo: this.dataset.tipo
+          })
+        });
+
+        if (response.status === 401) {
+          window.location.href = '/login';
+          return;
+        }
+
+        if (response.ok) {
+          boton.classList.toggle('activo');
+          boton.querySelector('.texto')!.textContent = esActivo ? "Save" : "Saved";
+        } else {
+          console.error("Error al actualizar favorito en la API");
+        }
+      });
+    }
+  }
+
+  customElements.define('boton-favorito', BotonFavorito);
+</script>
+
+<style>
+  .btn-favorito {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem;
+    border-radius: 50%;
+    border: 2px solid #D8CEBA;
+    background: #FFF;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    line-height: 0;
+  }
+
+  .icono-corazon { 
+    display: block; 
+    transition: fill 0.3s, stroke 0.3s;
+  }
+
+  .btn-favorito.activo {
+    border-color: #ff6b6b;
+    background: #fff5f5;
+    color: #ff6b6b;
+  }
+  
+  .btn-favorito.activo .icono-corazon {
+    fill: #ff6b6b;
+    stroke: #ff6b6b;
+  }
+
+  .btn-favorito:hover { 
+    transform: translateY(-2px);
+    border-color: #ff6b6b;
+  }
+</style>

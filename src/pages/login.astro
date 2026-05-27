@@ -7,6 +7,7 @@ import Footer from '../components/footer.astro';
 // Leemos los mensajes directos de la URL que nos mande el Registro o nuestra API
 const msg = Astro.url.searchParams.get('msg');
 const errorParam = Astro.url.searchParams.get('error');
+
 let errorMessage = errorParam ? decodeURIComponent(errorParam) : "";
 let successMessage = msg ? decodeURIComponent(msg) : "";
 ---

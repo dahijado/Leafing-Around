@@ -5,11 +5,31 @@ import Nav from '../components/nav.astro';
 import Footer from '../components/footer.astro';
 import GridCriaturas from '../components/gridCriaturas.svelte';
 import MensajeError from '../components/mensajeError.astro';
+import { supabase } from '../lib/supabase';
+import { getTodasCriaturas, crearSlug } from '../lib/funciones.js';
 
-import {getTodasCriaturas,crearSlug } from '../lib/funciones.js';
+interface Favorito {
+  criatura_slug: string;
+}
 
 let error = null;
-let criaturas = []
+let criaturas = [];
+let user = null;
+let favoritos: Favorito[] = [];
+
+const { data: { session } } = await supabase.auth.getSession();
+user = session?.user || null;
+
+if (user) {
+  const { data, error: favError } = await supabase
+    .from('favoritos')
+    .select('criatura_slug')
+    .eq('user_id', user.id);
+  
+  if (!favError && data) {
+    favoritos = data;
+  }
+}
 
 try {
   const todas = await getTodasCriaturas().catch(() => []);
@@ -25,7 +45,7 @@ try {
 }
 ---
 
-<Layout title="Leafing Around - Peces">
+<Layout title="Leafing Around - Criaturas Marinas">
   <Header />
   <Nav />
 
@@ -34,7 +54,7 @@ try {
       {error ? (
         <MensajeError error={error} />
       ) : (
-        <GridCriaturas client:load criaturas={criaturas} />
+        <GridCriaturas client:load criaturas={criaturas} user={user ? { id: user.id } : null} favoritos={favoritos} />
       )}
     </div>
   </main>

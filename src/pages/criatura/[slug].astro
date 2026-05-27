@@ -3,6 +3,8 @@ import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/header.astro';
 import Nav from '../../components/nav.astro';
 import Footer from '../../components/footer.astro';
+import BotonFavorito from '../../components/botonFavorito.astro';
+import { supabase } from '../../lib/supabase';
 
 import {
   getTodasCriaturas,
@@ -35,6 +37,19 @@ const volverHref =
     : criatura.type === "bug"
     ? "/insectos"
     : "/criaturasMarinas";
+
+const { data: { user } } = await supabase.auth.getUser();
+
+let esFavorito = false;
+if (user) {
+  const { data } = await supabase
+    .from('favoritos')
+    .select('id')
+    .eq('user_id', user.id)
+    .eq('criatura_slug', slug)
+    .single();
+  esFavorito = !!data;
+}
 ---
 
 <Layout title={`Leafing Around - ${criatura.name}`}>
@@ -89,6 +104,22 @@ const volverHref =
       />
 
       <h1>{criatura.name}</h1>
+
+      {user ? (
+        <div style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
+          <BotonFavorito 
+            slug={criatura.slug} 
+            nombre={criatura.name} 
+            imagenUrl={criatura.image_url} 
+            tipo={criatura.type} 
+            esFavoritoInicial={esFavorito}
+          />
+        </div>
+      ) : (
+        <div style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
+          <a href="/login" class="boton-login-aviso">Login to save favorites</a>
+        </div>
+      )}
 
       <p class="tipo">
         {criatura.type === "fish" && "Fish"}
@@ -360,6 +391,15 @@ const volverHref =
     font-size: 0.95rem;
     line-height: 1.5;
   }
+
+  .boton-login-aviso {
+      padding: 0.6rem 1.2rem;
+      background: #D8CEBA;
+      border-radius: 50px;
+      text-decoration: none;
+      color: #2E2A27;
+      font-weight: 600;
+    }
 
   @media (max-width: 480px) {
     .top-bar {
