@@ -1,10 +1,20 @@
 const API_KEY = import.meta.env.NOOKIPEDIA_API_KEY;
 
+import pecesFallback from "../data/peces.json";
+import insectosFallback from "../data/insectos.json";
+import criaturasFallback from "../data/criaturasMarinas.json";
+
 /**
  * FUNCIONES DE FETCH
  */
 
 let cache = {};
+
+const fallbacks = {
+  fish: pecesFallback || [],
+  bugs: insectosFallback || [],
+  sea: criaturasFallback || [],
+};
 
 // Fetch base con timeout en caso de que tarde demasiado en conectar
 function fetchConTimeout(url, options, timeout = 5000) {
@@ -35,11 +45,10 @@ async function fetchNookipedia(endpoint) {
 
     if (!res.ok) {
       console.warn(`HTTP ${res.status} en endpoint ${endpoint}`);
-      return [];
+      return fallbacks[endpoint] || [];
     }
 
     const data = await res.json();
-
     const result = Array.isArray(data) ? data : [];
 
     if (result.length > 0) {
@@ -48,8 +57,8 @@ async function fetchNookipedia(endpoint) {
 
     return result;
   } catch (err) {
-    console.error(`Error fetching ${endpoint}:`, err);
-    return [];
+    console.error(`Error fetching ${endpoint}, usando fallback:`, err);
+    return fallbacks[endpoint] || [];
   }
 }
 

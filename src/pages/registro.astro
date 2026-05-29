@@ -14,7 +14,6 @@ if (Astro.request.method === "POST") {
     const password = formData.get("password")?.toString();
 
     if (email && password) {
-      // Usamos el cliente de servidor
       const supabase = createServerSupabase(Astro.cookies);
       
       const { error } = await supabase.auth.signUp({ 
@@ -25,8 +24,6 @@ if (Astro.request.method === "POST") {
       if (error) {
         errorMessage = error.message;
       } else {
-        // Al registrarse exitosamente, Supabase ya habrá guardado 
-        // la sesión en las cookies automáticamente gracias a setAll.
         return Astro.redirect("/coleccion");
       }
     }

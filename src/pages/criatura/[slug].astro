@@ -31,6 +31,10 @@ const meses = [
   "SEP", "OCT", "NOV", "DEC"
 ];
 
+const horariosUnicos = [...new Set(
+  criatura.north?.availability_array?.map((a: any) => a.time)
+)];
+
 const volverHref =
   criatura.type === "fish"
     ? "/peces"
@@ -135,6 +139,15 @@ if (user) {
           <span class="label">Price</span>
           <span class="valor">{criatura.sell_nook}</span>
         </div>
+
+        {horariosUnicos.length > 0 && (
+          <div class="dato">
+            <span class="label">Time</span>
+            <span class="valor">
+              {horariosUnicos.join(' / ')}
+            </span>
+          </div>
+        )}
 
         {criatura.rarity && (
           <div class="dato">

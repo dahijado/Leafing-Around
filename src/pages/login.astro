@@ -4,7 +4,7 @@ import Header from '../components/header.astro';
 import Nav from '../components/nav.astro';
 import Footer from '../components/footer.astro';
 
-// Leemos los mensajes directos de la URL que nos mande el Registro o nuestra API
+// Se leen los parametros de la URL que nos mande el Registro o nuestra API
 const msg = Astro.url.searchParams.get('msg');
 const errorParam = Astro.url.searchParams.get('error');
 
